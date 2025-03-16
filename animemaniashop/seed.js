@@ -32,6 +32,9 @@ async function main() {
   const category2 = await prisma.category.create({
     data: { category_name: "Fantaisie" },
   });
+  const category3 = await prisma.category.create({
+    data: { category_name: "Grosse merde" },
+  });
 
   // Seed Anime
   const anime1 = await prisma.anime.create({
@@ -39,6 +42,9 @@ async function main() {
   });
   const anime2 = await prisma.anime.create({
     data: { Anime_name: "Naruto", manga_category: "Action" },
+  });
+  const anime3 = await prisma.anime.create({
+    data: { Anime_name: "", manga_category: "Grosse merde" },
   });
 
   // Seed Products
