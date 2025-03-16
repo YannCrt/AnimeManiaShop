@@ -55,8 +55,8 @@ async function main() {
 
   const product2 = await prisma.product.create({
     data: {
-      name: "Poster Naruto",
-      description: "Poster de Naruto Uzumaki",
+      name: "Figurine Naruto",
+      description: "Figurine de Naruto Uzumaki",
       price: 15,
       stock: 200,
       image_url: "url_image_naruto",
@@ -87,7 +87,7 @@ async function main() {
     data: {
       note: 4,
       date_avis: new Date(),
-      content: "Beau poster, mais un peu petit.",
+      content: "Belle figurine, mais un peu petite.",
       Id_Product: product2.id,
       Id_Client: user2.id,
     },
