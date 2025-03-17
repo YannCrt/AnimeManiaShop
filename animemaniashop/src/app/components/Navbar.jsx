@@ -6,7 +6,12 @@ const Navbar = () => {
     <div className="navbar">
       <div className="nav-img">
         <a href="/">
-          <Image src="/logo.jpg" width={100} height={90} alt="P" />
+          <Image
+            src="/logo.jpg"
+            width={100}
+            height={90}
+            alt="Logo de animemaniashop"
+          />
         </a>
       </div>
       <div className="nav-links">
@@ -15,10 +20,13 @@ const Navbar = () => {
             <a href="#search">Rechercher</a>
           </li>
           <li>
-            <a href="/login">Se connecter</a>
+            <a href="/shop">Shop</a>
           </li>
           <li>
             <a href="/cart">Mon Panier</a>
+          </li>
+          <li>
+            <a href="/login">Se connecter</a>
           </li>
         </ul>
       </div>
