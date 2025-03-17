@@ -8,9 +8,9 @@ export default async function handler(req, res) {
     return res.status(405).json({ message: "Méthode non autorisée" });
   }
 
-  const { firstname, lastname, mail, password, adress } = req.body;
+  const { firstname, lastname, email, password, adress } = req.body;
 
-  if (!firstname || !lastname || !mail || !password || !adress) {
+  if (!firstname || !lastname || !email || !password || !adress) {
     return res.status(400).json({ message: "Tous les champs sont requis" });
   }
 
@@ -22,10 +22,9 @@ export default async function handler(req, res) {
       data: {
         firstname,
         lastname,
-        mail,
-        password_hasch: hashedPassword,
+        email,
+        password: hashedPassword,
         role: "user", // Par défaut, on met un rôle "user"
-        inscription_date: new Date(),
         adress,
       },
     });
