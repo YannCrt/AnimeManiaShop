@@ -11,7 +11,7 @@ model User {
   id              Int       @id @default(autoincrement()) @map("Id_User")
   firstname       String    @db.VarChar(255)
   lastname        String    @db.VarChar(255)
-  email            String    @db.VarChar(255)
+  email            String    @db.VarChar(255) @unique
   password  String    @db.VarChar(255)
   role            String    @db.VarChar(255)
   adress          String    @db.VarChar(255)

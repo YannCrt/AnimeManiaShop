@@ -172,3 +172,16 @@ body {
 .login-footer a:hover {
   text-decoration: underline;
 }
+
+.logout-button {
+  background-color: red;
+  color: white;
+  padding: 8px 12px;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.logout-button:hover {
+  background-color: darkred;
+}

@@ -28,7 +28,7 @@ function Inscription() {
       const data = await response.json();
       if (response.ok) {
         alert("Inscription réussie !");
-        window.location.href = "/login";
+        window.location.href = "/";
       } else {
         alert(data.message || "Une erreur est survenue.");
       }
