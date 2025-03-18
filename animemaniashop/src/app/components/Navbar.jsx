@@ -37,9 +37,6 @@ const Navbar = () => {
           <li>
             <a href="/cart">Mon Panier</a>
           </li>
-          <li>
-            <a href="/login">Se connecter</a>
-          </li>
         </ul>
       </div>
     </div>
