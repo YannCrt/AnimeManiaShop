@@ -10,7 +10,7 @@ export default async function ShopPage() {
       <h1>Shop Page</h1>
       <div className="products">
         {products.map((product) => (
-          <div key={product.id}>
+          <div key={product.id} className="product-card">
             <Link href={`/product/${product.id}`}>
               <Image
                 src={product.image_url}
