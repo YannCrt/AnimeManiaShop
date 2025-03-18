@@ -1,3 +1,12 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+// This is your Prisma schema file
+// Learn more about it in the docs: https://pris.ly/d/prisma-schema
+
 generator client {
   provider = "prisma-client-js"
 }
@@ -13,13 +22,13 @@ model User {
   lastname        String    @db.VarChar(255)
   email            String    @db.VarChar(255) @unique
   password  String    @db.VarChar(255)
-  role            String    @db.VarChar(255)
-  adress          String    @db.VarChar(255)
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
-  cart            Cart?
-  avis            Avis[]
-  favoris         Favoris[]
+  role      String    @db.VarChar(255)
+  adress    String    @db.VarChar(255)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  cart      Cart?
+  avis      Avis[]
+  favoris   Favoris[]
 }
 
 model Category {
@@ -66,16 +75,16 @@ model Cart {
 }
 
 model Avis {
-  id         Int      @id @default(autoincrement()) @map("Id_Avis")
-  note       String   @db.VarChar(255)
-  date_avis  DateTime
-  content    String   @db.VarChar(255)
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-  product    Product  @relation(fields: [productId], references: [id])
-  productId  Int      @map("Id_Product")
-  user       User     @relation(fields: [userId], references: [id])
-  userId     Int      @map("Id_User")
+  id        Int      @id @default(autoincrement()) @map("Id_Avis")
+  note      String   @db.VarChar(255)
+  date_avis DateTime
+  content   String   @db.VarChar(255)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  product   Product  @relation(fields: [productId], references: [id])
+  productId Int      @map("Id_Product")
+  user      User     @relation(fields: [userId], references: [id])
+  userId    Int      @map("Id_User")
 }
 
 model Favoris {
@@ -94,8 +103,8 @@ model Cart_Item {
   quantitee Int      
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  product   Product @relation(fields: [productId], references: [id])
-  productId Int     @unique @map("Id_Product")
-  cart      Cart    @relation(fields: [cartId], references: [id])
-  cartId    Int     @map("Id_Cart")
+  product   Product  @relation(fields: [productId], references: [id])
+  productId Int      @unique @map("Id_Product")
+  cart      Cart     @relation(fields: [cartId], references: [id])
+  cartId    Int      @map("Id_Cart")
 }

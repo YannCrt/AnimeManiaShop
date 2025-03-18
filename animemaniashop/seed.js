@@ -27,24 +27,30 @@ async function main() {
 
   // Seed Categories
   const category1 = await prisma.category.create({
-    data: { category_name: "Action" },
+    data: { category_name: "Aventure" },
   });
   const category2 = await prisma.category.create({
-    data: { category_name: "Fantaisie" },
+    data: { category_name: "Action" },
   });
   const category3 = await prisma.category.create({
-    data: { category_name: "Grosse merde" },
+    data: { category_name: "Combat" },
   });
 
-  // Seed Anime
+  //Seed Anime
   const anime1 = await prisma.anime.create({
-    data: { Anime_name: "One Piece"},
+    data: { Anime_name: "One Piece", manga_category: category1.category_name },
   });
   const anime2 = await prisma.anime.create({
-    data: { Anime_name: "Naruto"},
+    data: { Anime_name: "Bleach", manga_category: category2.category_name },
   });
   const anime3 = await prisma.anime.create({
-    data: { Anime_name: "Dragon Ball"},
+    data: { Anime_name: "Naruto", manga_category: category2.category_name },
+  });
+  const anime4 = await prisma.anime.create({
+    data: {
+      Anime_name: "Dragon Ball",
+      manga_category: category3.category_name,
+    },
   });
 
   // Seed Products
@@ -55,18 +61,40 @@ async function main() {
       price: 25,
       stock: 100,
       image_url: "/luffy1.jfif",
-      animeId: anime1.id, // Correction du nom du champ: animeId au lieu de Id_Anime
+      animeId: anime1.id,
     },
   });
 
   const product2 = await prisma.product.create({
+    data: {
+      name: "Figurine Ichigo",
+      description: "Figurine de Ichigo Kurosaki",
+      price: 20,
+      stock: 75,
+      image_url: "/ichigo1.jpg",
+      animeId: anime2.id,
+    },
+  });
+
+  const product3 = await prisma.product.create({
     data: {
       name: "Figurine Naruto",
       description: "Figurine de Naruto Uzumaki",
       price: 15,
       stock: 200,
       image_url: "/naruto1.jfif",
-      animeId: anime2.id, // Correction du nom du champ: animeId au lieu de Id_Anime
+      animeId: anime3.id,
+    },
+  });
+
+  const product4 = await prisma.product.create({
+    data: {
+      name: "Figurine Goku",
+      description: "Figurine de Son Goku",
+      price: 20,
+      stock: 200,
+      image_url: "/goku1.jpg",
+      animeId: anime4.id,
     },
   });
 
