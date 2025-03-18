@@ -20,6 +20,10 @@ const Navbar = () => {
           <li>
             <Link href="#search">Rechercher</Link>
           </li>
+          <li>
+            <a href="/shop">Shop</a>
+          </li>
+
           {isAuthenticated ? (
             <>
               <li>
@@ -31,9 +35,6 @@ const Navbar = () => {
               <Link href="/login">Se connecter</Link>
             </li>
           )}
-          <li>
-            <a href="/shop">Shop</a>
-          </li>
           <li>
             <a href="/cart">Mon Panier</a>
           </li>
