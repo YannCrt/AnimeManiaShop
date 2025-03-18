@@ -1,8 +1,7 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import "../../css/delete.css"
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 const SupprimerPage = () => {
   const [showConfirmation, setShowConfirmation] = useState(true);
@@ -11,19 +10,19 @@ const SupprimerPage = () => {
   // Fonction pour annuler la suppression et revenir à la page précédente
   const annulerSuppression = () => {
     setShowConfirmation(false); // Ferme la boîte de confirmation
-    router.push('/profil'); // Redirige vers la page de profil
+    router.push("/profil"); // Redirige vers la page de profil
   };
 
-  
   const handleDeleteAccount = async () => {
     try {
       const response = await fetch("/api/delete-account", { method: "DELETE" });
       const data = await response.json();
 
-      if (!response.ok) throw new Error(data.message || "Erreur lors de la suppression");
+      if (!response.ok)
+        throw new Error(data.message || "Erreur lors de la suppression");
 
       alert("Compte supprimé avec succès !");
-      router.push("/"); 
+      router.push("/");
     } catch (error) {
       console.error("Erreur:", error);
       alert("Une erreur est survenue.");

@@ -1,17 +1,29 @@
+/* global.css - Fichier principal avec variables et styles de base */
 @import "tailwindcss";
 
 :root {
-  --primary-color: #00bcd4;  /* Bleu clair */
-  --primary-color-dark: #0288d1;  /* Bleu foncé */
-  --secondary-color: #8d8d8d;  /* Gris doux */
-  --secondary-color-dark: #616161;  /* Gris foncé */
-  --danger-color: #c92d2d;  /* Rouge doux */
-  --danger-color-dark: #ff0000;  /* Rouge intense */
-  --white-color: #ffffff;  /* Blanc */
-  --black-color: #000000;  /* Noir */
-  --background-color: #f4f4f4;  /* Couleur de fond */
-  --text-color: #333;  /* Couleur du texte */
+  /* Palette de couleurs centralisée */
+  --primary-color: #00bcd4;
+  --primary-color-dark: #0288d1;
+  --secondary-color: #8d8d8d;
+  --secondary-color-dark: #616161;
+  --danger-color: #c92d2d;
+  --danger-color-dark: #ff0000;
+  --white-color: #ffffff;
+  --black-color: #000000;
+  --background-color: #f4f4f4;
+  --text-color: #333;
+
+  /* Variables d'interface */
+  --box-shadow-sm: 0px 4px 10px rgba(0, 0, 0, 0.2);
+  --box-shadow-md: 0px 10px 30px rgba(0, 0, 0, 0.1);
+  --box-shadow-primary: 0 0 10px rgba(0, 188, 212, 0.5);
+  --box-shadow-secondary: 0 0 10px rgba(141, 141, 141, 0.5);
+  --box-shadow-danger: 0 0 10px rgba(229, 115, 115, 0.5);
+  --border-radius: 12px;
+  --transition-default: all 0.3s ease;
 }
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -21,37 +33,121 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
+    --background: #00bcd4;
     --foreground: #ededed;
   }
 }
 
+/* Animations globales */
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+/* Styles de base */
 * {
   font-family: "Rubik", sans-serif;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--background-color);
+  color: var(--text-color);
+  font-family: "Rubik", Arial, sans-serif;
+  margin: 0;
+  padding: 0;
 }
 
+/* Styles des boutons globaux */
+.action-button {
+  padding: 10px 18px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: var(--transition-default);
+  box-shadow: var(--box-shadow-sm);
+  font-weight: 500;
+}
+
+.action-button:hover {
+  opacity: 0.9;
+  transform: scale(1.05);
+}
+
+.action-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Navigation */
 .navbar {
   display: flex;
-
   justify-content: space-between;
   align-items: center;
-  background-color: #ffffff;
-  color: #000000;
+  background: linear-gradient(
+    135deg,
+    var(--primary-color),
+    var(--primary-color-dark)
+  );
+  color: var(--white-color);
+  padding: 0.5rem 1rem;
+  box-shadow: var(--box-shadow-sm);
 }
 
+.nav-img {
+  padding: 1rem;
+  margin-left: 4rem;
+}
+
+.nav-img a img {
+  border-radius: 50%;
+  transition: var(--transition-default);
+}
+
+.nav-img a img:hover {
+  transform: scale(1.05);
+}
+
+.nav-links ul {
+  display: flex;
+  gap: 2rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-links ul li:last-child {
+  margin-right: 2rem;
+}
+
+.nav-links ul li a {
+  color: var(--white-color);
+  text-decoration: none;
+  font-weight: 500;
+  transition: var(--transition-default);
+}
+
+.nav-links ul li a:hover {
+  opacity: 0.8;
+}
+
+/* Footer */
 .footer-container {
   display: flex;
   flex-direction: row;
   align-items: center;
-  background-color: #4e4d4d;
+  background: linear-gradient(
+    135deg,
+    var(--primary-color),
+    var(--primary-color-dark)
+  );
   height: 10rem;
-  color: #000000;
+  color: var(--white-color);
   justify-content: center;
 }
 
@@ -63,7 +159,7 @@ body {
 
 .copyright {
   display: flex;
-  background-color: #000000;
+  background-color: var(--black-color);
   color: #464545;
   justify-content: center;
   align-items: center;
@@ -71,39 +167,29 @@ body {
 }
 
 .copyright a {
-  color: rgb(255, 0, 0);
+  color: var(--danger-color);
+  transition: var(--transition-default);
 }
 
+.copyright a:hover {
+  color: var(--danger-color-dark);
+  text-decoration: underline;
+}
+
+/* Page d'accueil */
 .home {
   padding: 30rem;
   justify-content: center;
   display: flex;
 }
 
-.nav-img {
-  padding: 1rem;
-  margin-left: 4rem;
-}
-.nav-img a img {
-  border-radius: 50% 50% 50% 50%;
-}
-
-.nav-links ul {
-  display: flex;
-
-  gap: 2rem;
-}
-
-.nav-links ul li:last-child {
-  margin-right: 2rem;
-}
-
+/* Formulaire de connexion */
 .login-page {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: rgb(241, 241, 241);
+  background-color: var(--background-color);
   height: 100vh;
 }
 
@@ -112,85 +198,287 @@ body {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  box-shadow: 10px 10px 15px 3px;
-  background-color: #ffffff;
-  border-radius: 10px;
+  box-shadow: var(--box-shadow-md);
+  background-color: var(--white-color);
+  border-radius: var(--border-radius);
   padding: 2rem;
+  min-width: 320px;
+  animation: fadeIn 0.8s ease-out;
 }
 
 .login-container h2 {
-  font-size: xx-large;
+  font-size: 1.75rem;
   font-weight: bold;
-  color: var(--color-gray-700);
+  color: var(--text-color);
   margin-bottom: 24px;
 }
 
 .login-input {
   margin-bottom: 16px;
+  width: 100%;
 }
 
 .login-input label {
   display: block;
-  color: black;
+  color: var(--text-color);
+  margin-bottom: 0.5rem;
+  font-weight: 500;
 }
 
 .login-input input {
   display: block;
   width: 100%;
-  padding: 0.5rem;
+  padding: 0.75rem;
   border-radius: 6px;
   border: 1px solid #ccc;
+  transition: var(--transition-default);
 }
 
 .login-input input:hover {
-  display: block;
-  width: 100%;
-  color: #000000;
+  border-color: var(--primary-color);
 }
 
 .login-input input:focus {
-  border-color: #007bff;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px rgba(0, 188, 212, 0.2);
   outline: none;
 }
+
 .login-button {
   width: 100%;
-  background-color: #007bff;
-  color: white;
-  padding: 10px;
+  background-color: var(--primary-color);
+  color: var(--white-color);
+  padding: 12px;
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  transition: background 0.3s;
+  transition: var(--transition-default);
   margin-top: 1rem;
+  font-weight: 500;
 }
+
 .login-button:hover {
-  background-color: #0056b3;
+  background-color: var(--primary-color-dark);
+  transform: translateY(-2px);
 }
+
 .login-footer {
   text-align: center;
-  margin-top: 1rem;
+  margin-top: 1.5rem;
   font-size: 14px;
   color: #666;
 }
+
 .login-footer a {
-  color: #007bff;
+  color: var(--primary-color);
   text-decoration: none;
+  transition: var(--transition-default);
 }
+
 .login-footer a:hover {
+  color: var(--primary-color-dark);
   text-decoration: underline;
 }
 
-.logout-button {
-  background-color: red;
+/* Styles pour les pages de profil, édition et suppression */
+
+/* Conteneurs de base pour les pages de compte */
+.profile-container,
+.edit-profile-container {
+  display: flex;
+  flex-direction: column;
+  color: var(--white-color);
+  font-family: "Rubik", Arial, sans-serif;
+  max-width: 600px;
+  margin: 20px auto;
+  padding: 25px;
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow-md);
+  animation: fadeIn 0.8s ease-out;
+  background: linear-gradient(
+    135deg,
+    var(--primary-color),
+    var(--primary-color-dark)
+  );
+}
+
+/* Styles pour la page de confirmation de suppression */
+.confirmation-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 80vh; /* Réduit la hauteur de 100vh à 80vh */
+  background: linear-gradient(
+    135deg,
+    var(--primary-color),
+    var(--primary-color-dark)
+  );
+  padding: 0 20px; /* Ajout de padding horizontal pour les écrans étroits */
+}
+
+.confirmation-box {
+  background: rgba(0, 0, 0, 0.7);
   color: white;
-  padding: 8px 12px;
-  border: none;
-  cursor: pointer;
-  border-radius: 4px;
+  max-width: 650px; /* Augmentation de la largeur max de 600px à 650px */
+  width: 100%; /* Assure que la boîte prend toute la largeur disponible jusqu'à max-width */
+  padding: 30px 35px; /* Padding légèrement augmenté */
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow-md);
+  text-align: center;
+  animation: fadeIn 0.8s ease-out;
+  margin: 0 auto; /* Centre horizontalement */
+}
+
+/* Titres de page */
+.profile-container h2,
+.edit-profile-container h2,
+.confirmation-box h2 {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  font-size: 2rem;
+  font-weight: bold;
+  text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.4);
+}
+
+/* Page profil */
+.profile-details {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 20px;
+  border-radius: 10px;
+  backdrop-filter: blur(10px);
+  transition: transform 0.3s ease;
+}
+
+.profile-details:hover {
+  transform: scale(1.02);
+}
+
+.profile-details p {
+  font-size: 1.1rem;
+  margin-bottom: 12px;
+}
+
+/* Boutons spécifiques */
+.profile-actions,
+.form-actions {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+}
+
+/* Ajustement des actions dans la boîte de confirmation */
+.confirmation-actions {
+  margin-top: 30px; /* Espace plus grand avant les boutons */
+  display: flex;
+  justify-content: center;
+  gap: 2rem; /* Plus d'espace entre les boutons */
+}
+
+/* Amélioration des boutons dans la confirmation */
+.confirmation-actions .action-button {
+  min-width: 120px; /* Largeur minimale pour les boutons */
+  padding: 12px 24px; /* Boutons légèrement plus grands */
+}
+
+/* Boutons de la page profil */
+.edit-button {
+  background-color: var(--primary-color);
+  color: var(--white-color);
+  box-shadow: var(--box-shadow-primary);
+}
+
+.edit-button:hover {
+  background-color: var(--primary-color-dark);
+  box-shadow: 0 0 15px rgba(0, 188, 212, 0.8);
+}
+
+.logout-button {
+  background-color: var(--secondary-color);
+  color: var(--white-color);
+  box-shadow: var(--box-shadow-secondary);
 }
 
 .logout-button:hover {
-  background-color: darkred;
+  background-color: var(--secondary-color-dark);
+  box-shadow: 0 0 15px rgba(141, 141, 141, 0.8);
 }
 
+.delete-button,
+.yes-button {
+  background-color: var(--danger-color);
+  color: var(--white-color);
+  box-shadow: var(--box-shadow-danger);
+}
 
+.delete-button:hover,
+.yes-button:hover {
+  background-color: var(--danger-color-dark);
+  box-shadow: 0 0 15px rgba(229, 115, 115, 0.8);
+}
+
+.no-button {
+  background-color: var(--secondary-color);
+  color: var(--white-color);
+  box-shadow: var(--box-shadow-secondary);
+}
+
+.no-button:hover {
+  background-color: var(--secondary-color-dark);
+  box-shadow: 0 0 15px rgba(141, 141, 141, 0.8);
+}
+
+.save-button {
+  background-color: var(--primary-color);
+  color: var(--white-color);
+  box-shadow: var(--box-shadow-primary);
+}
+
+.save-button:hover {
+  background-color: var(--primary-color-dark);
+  box-shadow: 0 0 15px rgba(0, 188, 212, 0.8);
+}
+
+/* Page d'édition de profil */
+.edit-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  width: 100%;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-group label {
+  font-size: 1.1rem;
+  font-weight: bold;
+}
+
+.form-group input {
+  padding: 12px;
+  font-size: 1rem;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.2);
+  color: var(--white-color);
+  outline: none;
+  transition: var(--transition-default);
+}
+
+.form-group input:focus {
+  border-color: var(--white-color);
+  background: rgba(255, 255, 255, 0.3);
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1);
+}
+
+/* État de chargement */
+.loading {
+  text-align: center;
+  font-size: 1.5rem;
+  margin-top: 30px;
+  color: var(--white-color);
+}

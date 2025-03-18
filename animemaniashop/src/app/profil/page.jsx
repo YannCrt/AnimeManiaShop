@@ -3,7 +3,6 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "../contexte/auth"; // Utilisation du context
-import '../css/profil.css'; 
 
 const ProfilePage = () => {
   const [user, setUser] = useState(null);
@@ -16,7 +15,8 @@ const ProfilePage = () => {
         const response = await fetch("/api/profil");
         const data = await response.json();
 
-        if (!response.ok) throw new Error(data.message || "Erreur de chargement");
+        if (!response.ok)
+          throw new Error(data.message || "Erreur de chargement");
 
         setUser(data.user);
       } catch (error) {
@@ -37,21 +37,38 @@ const ProfilePage = () => {
 
   return (
     <div className="profile-container">
-    <h2>Mon Profil</h2>
-  
-    <div className="profile-details">
-      <p><strong>Prénom :</strong> {user.firstname}</p>
-      <p><strong>Nom :</strong> {user.lastname}</p>
-      <p><strong>Email :</strong> {user.email}</p>
-      <p><strong>Adresse :</strong> {user.adress}</p>
+      <h2>Mon Profil</h2>
+
+      <div className="profile-details">
+        <p>
+          <strong>Prénom :</strong> {user.firstname}
+        </p>
+        <p>
+          <strong>Nom :</strong> {user.lastname}
+        </p>
+        <p>
+          <strong>Email :</strong> {user.email}
+        </p>
+        <p>
+          <strong>Adresse :</strong> {user.adress}
+        </p>
+      </div>
+
+      <div className="profile-actions">
+        <button
+          onClick={() => router.push("/profil/edit")}
+          className="action-button edit-button"
+        >
+          Modifier le profil
+        </button>
+        <button onClick={handleLogout} className="action-button logout-button">
+          Se déconnecter
+        </button>
+        <button className="action-button delete-button">
+          <a href="/profil/delete">Supprimer le profil</a>
+        </button>
+      </div>
     </div>
-  
-    <div className="profile-actions">
-      <button onClick={() => router.push("/profil/edit")} className="action-button edit-button">Modifier le profil</button>
-      <button onClick={handleLogout} className="action-button logout-button">Se déconnecter</button>
-      <button className="action-button delete-button"><a  href="/profil/delete" >Supprimer le profil</a></button>
-    </div>
-  </div>
   );
 };
 

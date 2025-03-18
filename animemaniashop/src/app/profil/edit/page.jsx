@@ -1,22 +1,21 @@
-"use client"
+"use client";
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { useAuth } from "../../contexte/auth"; 
-import '../../css/edit.css'; 
+import { useAuth } from "../../contexte/auth";
 
 const EditProfilePage = () => {
   const [user, setUser] = useState({
-    firstname: '',
-    lastname: '',
-    email: '',
-    adress: ''
+    firstname: "",
+    lastname: "",
+    email: "",
+    adress: "",
   });
   const [loading, setLoading] = useState(false);
-  const [errorMessage, setErrorMessage] = useState('');
-  const [successMessage, setSuccessMessage] = useState(''); 
+  const [errorMessage, setErrorMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
   const router = useRouter();
-  const { logout } = useAuth(); 
+  const { logout } = useAuth();
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -24,7 +23,8 @@ const EditProfilePage = () => {
         const response = await fetch("/api/profil");
         const data = await response.json();
 
-        if (!response.ok) throw new Error(data.message || "Erreur de chargement");
+        if (!response.ok)
+          throw new Error(data.message || "Erreur de chargement");
 
         setUser(data.user);
       } catch (error) {
@@ -47,8 +47,8 @@ const EditProfilePage = () => {
   const handleSave = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setErrorMessage(''); 
-    setSuccessMessage(''); 
+    setErrorMessage("");
+    setSuccessMessage("");
 
     console.log("Données envoyées à l'API:", user);
 
@@ -64,10 +64,11 @@ const EditProfilePage = () => {
       const data = await response.json();
       console.log("Réponse du serveur:", data); // Débogage
 
-      if (!response.ok) throw new Error(data.message || "Erreur lors de la mise à jour");
+      if (!response.ok)
+        throw new Error(data.message || "Erreur lors de la mise à jour");
 
       setSuccessMessage("Profil mis à jour !");
-      router.push("/profil"); 
+      router.push("/profil");
     } catch (error) {
       console.error("Erreur:", error);
       setErrorMessage("Une erreur est survenue, veuillez réessayer.");
@@ -82,7 +83,9 @@ const EditProfilePage = () => {
 
       {/* Affichage du message d'erreur ou de succès */}
       {errorMessage && <div className="error-message">{errorMessage}</div>}
-      {successMessage && <div className="success-message">{successMessage}</div>}
+      {successMessage && (
+        <div className="success-message">{successMessage}</div>
+      )}
 
       <form onSubmit={handleSave} className="edit-form">
         <div className="form-group">
@@ -134,7 +137,11 @@ const EditProfilePage = () => {
         </div>
 
         <div className="form-actions">
-          <button type="submit" className="action-button save-button" disabled={loading}>
+          <button
+            type="submit"
+            className="action-button save-button"
+            disabled={loading}
+          >
             {loading ? "Enregistrement..." : "Sauvegarder les modifications"}
           </button>
         </div>
