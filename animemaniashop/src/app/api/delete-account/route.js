@@ -1,6 +1,7 @@
 import { cookies } from "next/headers";
 import jwt from "jsonwebtoken";
 import { PrismaClient } from "@prisma/client";
+import { revalidatePath } from "next/cache";
 
 const prisma = new PrismaClient();
 
@@ -14,7 +15,6 @@ export async function DELETE() {
     await prisma.user.delete({ where: { id: decoded.id } });
 
     cookies().set("token", "", { expires: new Date(0) }); // Supprime le cookie
-
     return Response.json({ message: "Compte supprimé" });
   } catch (error) {
     return Response.json({ message: "Erreur serveur" }, { status: 500 });

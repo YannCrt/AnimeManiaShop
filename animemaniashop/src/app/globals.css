@@ -1,10 +1,17 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --primary-color: #00bcd4;  /* Bleu clair */
+  --primary-color-dark: #0288d1;  /* Bleu foncé */
+  --secondary-color: #8d8d8d;  /* Gris doux */
+  --secondary-color-dark: #616161;  /* Gris foncé */
+  --danger-color: #c92d2d;  /* Rouge doux */
+  --danger-color-dark: #ff0000;  /* Rouge intense */
+  --white-color: #ffffff;  /* Blanc */
+  --black-color: #000000;  /* Noir */
+  --background-color: #f4f4f4;  /* Couleur de fond */
+  --text-color: #333;  /* Couleur du texte */
 }
-
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -185,3 +192,5 @@ body {
 .logout-button:hover {
   background-color: darkred;
 }
+
+

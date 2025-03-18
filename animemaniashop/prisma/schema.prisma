@@ -27,16 +27,16 @@ model Category {
   category_name String    @db.VarChar(255)
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
-  products      assigner[]
+  anime         Anime[] @relation("CategoryAnimes")
 }
 
 model Anime {
   id             Int       @id @default(autoincrement()) @map("Id_Anime")
   Anime_name     String    @db.VarChar(255)
-  manga_category String    @db.VarChar(255)
   createdAt      DateTime  @default(now())
   updatedAt      DateTime  @updatedAt
   products       Product[]
+  categories     Category[] @relation("CategoryAnimes")
 }
 
 model Product {
@@ -50,7 +50,6 @@ model Product {
   updatedAt   DateTime   @updatedAt
   anime       Anime      @relation(fields: [animeId], references: [id])
   animeId     Int        @map("Id_Anime")
-  categories  assigner[]
   avis        Avis[]
   favoris     Favoris[]
   cartItem    Cart_Item?
@@ -92,22 +91,11 @@ model Favoris {
 
 model Cart_Item {
   id        Int     @id @default(autoincrement()) @map("Id_Cart_Item")
-  quantitee String  @db.VarChar(255)
+  quantitee Int      
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   product   Product @relation(fields: [productId], references: [id])
   productId Int     @unique @map("Id_Product")
   cart      Cart    @relation(fields: [cartId], references: [id])
   cartId    Int     @map("Id_Cart")
-}
-
-model assigner {
-  product    Product  @relation(fields: [productId], references: [id])
-  productId  Int      @map("Id_Product")
-  category   Category @relation(fields: [categoryId], references: [id])
-  categoryId Int      @map("Id_Category")
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-
-  @@id([productId, categoryId])
 }

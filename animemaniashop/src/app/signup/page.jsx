@@ -18,22 +18,41 @@ function Inscription() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("/api/register", {
+      // Premièrement, on envoie la requête pour inscrire l'utilisateur
+      const registerResponse = await fetch("/api/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(formData),
       });
-      const data = await response.json();
-      if (response.ok) {
-        alert("Inscription réussie !");
-        window.location.href = "/";
+      const registerData = await registerResponse.json();
+
+      if (registerResponse.ok) {
+        // Si l'inscription est réussie, on se connecte automatiquement
+        const loginResponse = await fetch("/api/login", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email: formData.email,
+            password: formData.password,
+          }),
+        });
+        const loginData = await loginResponse.json();
+
+        if (loginResponse.ok) {
+          alert("Inscription et connexion réussies !");
+          window.location.href = "/profil"; // Rediriger vers la page d'accueil
+        } else {
+          alert(loginData.message || "Erreur lors de la connexion.");
+        }
       } else {
-        alert(data.message || "Une erreur est survenue.");
+        alert(registerData.message || "Une erreur est survenue lors de l'inscription.");
       }
     } catch (error) {
-      console.error("Erreur lors de l'inscription:", error);
+      console.error("Erreur lors de l'inscription et de la connexion:", error);
       alert("Une erreur est survenue. Veuillez réessayer.");
     }
   };

@@ -3,26 +3,10 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useAuth } from "../contexte/auth"; // Utilisation du context
 
 const Navbar = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-
-  useEffect(() => {
-    const checkAuth = async () => {
-      try {
-        const res = await fetch("/api/check-auth", { cache: "no-store" });
-        const data = await res.json();
-        setIsAuthenticated(data.authenticated);
-      } catch (error) {
-        console.error(
-          "Erreur lors de la vérification de l'authentification :",
-          error
-        );
-      }
-    };
-
-    checkAuth();
-  }, []);
+  const { isAuthenticated } = useAuth(); // Récupère l'état d'authentification depuis le contexte
 
   return (
     <div className="navbar">
@@ -43,11 +27,9 @@ const Navbar = () => {
               </li>
             </>
           ) : (
-            <>
-              <li>
-                <Link href="/login">Se connecter</Link>
-              </li>
-            </>
+            <li>
+              <Link href="/login">Se connecter</Link>
+            </li>
           )}
           <li>
             <Link href="/cart">Mon Panier</Link>
