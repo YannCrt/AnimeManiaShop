@@ -1,28 +1,26 @@
-"use server";
-
-import { prisma } from "./prisma";
-
-export async function getAllProducts() {
-  return await prisma.product.findMany();
-}
-
-// Ajouter au fichier existant lib/product.action.js
+// /lib/product.action.js
+import prisma from "./prisma"; // Assure-toi d'importer ton client Prisma
 
 export async function getProductById(id) {
-  return await prisma.product.findUnique({
-    where: { id: parseInt(id) },
-    include: {
-      anime: true,
-      categories: {
-        include: {
-          category: true,
-        },
+  try {
+    const product = await prisma.product.findUnique({
+      where: {
+        id: parseInt(id), // Convertit l'ID en entier
       },
-    },
-  });
+    });
+    return product; // Retourne le produit
+  } catch (error) {
+    console.error("Erreur lors de la récupération du produit : ", error);
+    return null; // Retourne null si une erreur se produit
+  }
 }
 
-// Cette fonction sera implémentée plus tard pour gérer l'ajout au panier
-export async function addToCart(userId, productId, quantity) {
-  // Implémentation à venir quand vous serez prêt à gérer le panier
+export async function getAllProducts() {
+  try {
+    const products = await prisma.product.findMany(); // Récupère tous les produits
+    return products; // Retourne la liste des produits
+  } catch (error) {
+    console.error("Erreur lors de la récupération des produits : ", error);
+    return []; // Retourne un tableau vide en cas d'erreur
+  }
 }

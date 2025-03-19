@@ -1,58 +1,52 @@
+// /app/product/[id]/page.js
+"use server";
+import { getProductById } from "../../../../lib/product.action"; // Assure-toi que cette fonction est correcte
 import Image from "next/image";
-import { prisma } from "../../../../lib/prisma";
 
-// Fonction pour récupérer un produit par son ID
-async function getProductById(id) {
-  return await prisma.product.findUnique({
-    where: { id: parseInt(id) },
-    include: {
-      anime: true,
-      categories: {
-        include: {
-          category: true,
-        },
-      },
-    },
-  });
-}
-
-export default async function ProductDetailPage({ params }) {
-  const product = await getProductById(params.id);
+export default async function ProductPage({ params }) {
+  const { id } = params; // Récupère l'ID depuis les paramètres d'URL
+  const product = await getProductById(id); // Appelle la fonction pour obtenir le produit par ID
 
   if (!product) {
-    return <div>Produit non trouvé</div>;
+    return <div>Produit non trouvé</div>; // Affiche ce message si le produit n'existe pas
   }
 
   return (
     <div className="product-detail">
-      <h1>{product.name}</h1>
+      <h1 className="product-title">{product.name}</h1>
+
       <div className="product-image">
         <Image
           src={product.image_url}
           alt={product.name}
-          width={400}
-          height={400}
-          priority
+          height={300}
+          width={300}
+          objectFit="cover"
         />
       </div>
+
       <div className="product-info">
-        <p className="description">{product.description}</p>
-        <p className="anime">Anime: {product.anime.Anime_name}</p>
-        <p className="price">Prix: {product.price} €</p>
-        <p className="stock">Stock disponible: {product.stock}</p>
+        <p className="product-description">{product.description}</p>
 
-        {product.categories.length > 0 && (
-          <div className="categories">
-            <p>Catégories:</p>
-            <ul>
-              {product.categories.map((item) => (
-                <li key={item.categoryId}>{item.category.category_name}</li>
-              ))}
-            </ul>
-          </div>
-        )}
+        <p className="product-price">
+          <strong>Prix : </strong>
+          {product.price} €
+        </p>
 
-        <button className="add-to-cart">Ajouter au panier</button>
+        <div className="quantity">
+          <label htmlFor="quantity">Quantité: </label>
+          <input
+            type="number"
+            id="quantity"
+            min="1"
+            defaultValue="1"
+            className="quantity-input"
+          />
+        </div>
+
+        <div>
+          <button className="add-to-cart">Ajouter au panier</button>
+        </div>
       </div>
     </div>
   );
