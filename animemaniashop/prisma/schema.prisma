@@ -17,10 +17,10 @@ datasource db {
 }
 
 model User {
-  id              Int       @id @default(autoincrement()) @map("Id_User")
-  firstname       String    @db.VarChar(255)
-  lastname        String    @db.VarChar(255)
-  email            String    @db.VarChar(255) @unique
+  id        Int       @id @default(autoincrement()) @map("Id_User")
+  firstname String    @db.VarChar(255)
+  lastname  String    @db.VarChar(255)
+  email     String    @unique @db.VarChar(255)
   password  String    @db.VarChar(255)
   role      String    @db.VarChar(255)
   adress    String    @db.VarChar(255)
@@ -32,20 +32,20 @@ model User {
 }
 
 model Category {
-  id            Int       @id @default(autoincrement()) @map("Id_Category")
-  category_name String    @db.VarChar(255)
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-  anime         Anime[] @relation("CategoryAnimes")
+  id            Int      @id @default(autoincrement()) @map("Id_Category")
+  category_name String   @db.VarChar(255)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  anime         Anime[]  @relation("CategoryAnimes")
 }
 
 model Anime {
-  id             Int       @id @default(autoincrement()) @map("Id_Anime")
-  Anime_name     String    @db.VarChar(255)
-  createdAt      DateTime  @default(now())
-  updatedAt      DateTime  @updatedAt
-  products       Product[]
-  categories     Category[] @relation("CategoryAnimes")
+  id         Int        @id @default(autoincrement()) @map("Id_Anime")
+  Anime_name String     @db.VarChar(255)
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+  products   Product[]
+  categories Category[] @relation("CategoryAnimes")
 }
 
 model Product {
@@ -99,8 +99,8 @@ model Favoris {
 }
 
 model Cart_Item {
-  id        Int     @id @default(autoincrement()) @map("Id_Cart_Item")
-  quantitee Int      
+  id        Int      @id @default(autoincrement()) @map("Id_Cart_Item")
+  quantitee Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   product   Product  @relation(fields: [productId], references: [id])

@@ -6,18 +6,18 @@ export async function getAllProducts() {
   return await prisma.product.findMany();
 }
 
-// Ajouter au fichier existant lib/product.action.js
-
 export async function getProductById(id) {
   return await prisma.product.findUnique({
     where: { id: parseInt(id) },
     include: {
-      anime: true,
-      categories: {
+      anime: {
         include: {
-          category: true,
+          categories: true,
         },
       },
+      avis: true,
+      favoris: true,
+      cartItem: true,
     },
   });
 }

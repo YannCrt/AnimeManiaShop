@@ -1,23 +1,10 @@
 import Image from "next/image";
-import { prisma } from "../../../../lib/prisma";
-
-// Fonction pour récupérer un produit par son ID
-async function getProductById(id) {
-  return await prisma.product.findUnique({
-    where: { id: parseInt(id) },
-    include: {
-      anime: true,
-      categories: {
-        include: {
-          category: true,
-        },
-      },
-    },
-  });
-}
+import { getProductById } from "../../../../lib/product.action";
 
 export default async function ProductDetailPage({ params }) {
-  const product = await getProductById(params.id);
+  const resolvedParams = await params;
+  const productId = parseInt(resolvedParams.id);
+  const product = await getProductById(productId);
 
   if (!product) {
     return <div>Produit non trouvé</div>;
@@ -41,12 +28,12 @@ export default async function ProductDetailPage({ params }) {
         <p className="price">Prix: {product.price} €</p>
         <p className="stock">Stock disponible: {product.stock}</p>
 
-        {product.categories.length > 0 && (
+        {product.anime.categories && product.anime.categories.length > 0 && (
           <div className="categories">
             <p>Catégories:</p>
             <ul>
-              {product.categories.map((item) => (
-                <li key={item.categoryId}>{item.category.category_name}</li>
+              {product.anime.categories.map((category) => (
+                <li key={category.id}>{category.category_name}</li>
               ))}
             </ul>
           </div>

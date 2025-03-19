@@ -10,7 +10,7 @@ async function main() {
       email: "jean.dupont2@mail.com",
       password: "hashedpassword1",
       role: "user",
-      adress: "123 rue de Paris", // Notez que le champ est "adress" dans votre schéma (avec un seul 'd')
+      adress: "123 rue de Paris",
     },
   });
 
@@ -21,7 +21,7 @@ async function main() {
       email: "alice.martin2@mail.com",
       password: "hashedpassword2",
       role: "admin",
-      adress: "456 avenue de Lyon", // Notez que le champ est "adress" dans votre schéma (avec un seul 'd')
+      adress: "456 avenue de Lyon",
     },
   });
 
@@ -38,18 +38,30 @@ async function main() {
 
   //Seed Anime
   const anime1 = await prisma.anime.create({
-    data: { Anime_name: "One Piece", manga_category: category1.category_name },
+    data: {
+      Anime_name: "One Piece",
+      categories: { connect: { id: category1.id } },
+    },
   });
+
   const anime2 = await prisma.anime.create({
-    data: { Anime_name: "Bleach", manga_category: category2.category_name },
+    data: {
+      Anime_name: "Bleach",
+      categories: { connect: { id: category2.id } },
+    },
   });
+
   const anime3 = await prisma.anime.create({
-    data: { Anime_name: "Naruto", manga_category: category2.category_name },
+    data: {
+      Anime_name: "Naruto",
+      categories: { connect: { id: category2.id } },
+    },
   });
+
   const anime4 = await prisma.anime.create({
     data: {
       Anime_name: "Dragon Ball",
-      manga_category: category3.category_name,
+      categories: { connect: { id: category3.id } },
     },
   });
 
@@ -102,31 +114,28 @@ async function main() {
   const cart1 = await prisma.cart.create({
     data: {
       date_creation: new Date(),
-      userId: user1.id, // Correction: userId au lieu de Id_Client
+      userId: user1.id,
     },
   });
-
-  // Remarque: Le modèle User a une relation unique avec Cart, donc un seul cart par utilisateur
-  // Il n'est pas possible de créer deux carts pour deux utilisateurs différents
 
   // Seed Reviews (Avis)
   await prisma.avis.create({
     data: {
-      note: "5", // Remarque: la note est une string dans votre schéma, pas un nombre
+      note: "5",
       date_avis: new Date(),
       content: "Superbe figurine, excellente qualité!",
-      productId: product1.id, // Correction: productId au lieu de Id_Product
-      userId: user1.id, // Correction: userId au lieu de Id_Client
+      productId: product1.id,
+      userId: user1.id,
     },
   });
 
   await prisma.avis.create({
     data: {
-      note: "4", // Remarque: la note est une string dans votre schéma, pas un nombre
+      note: "4",
       date_avis: new Date(),
       content: "Belle figurine, mais un peu petite.",
-      productId: product2.id, // Correction: productId au lieu de Id_Product
-      userId: user2.id, // Correction: userId au lieu de Id_Client
+      productId: product2.id,
+      userId: user2.id,
     },
   });
 
@@ -134,38 +143,24 @@ async function main() {
   await prisma.favoris.create({
     data: {
       date_ajout: new Date(),
-      userId: user1.id, // Correction: userId au lieu de Id_Client
-      productId: product1.id, // Correction: productId au lieu de Id_Product
+      userId: user1.id,
+      productId: product1.id,
     },
   });
   await prisma.favoris.create({
     data: {
       date_ajout: new Date(),
-      userId: user2.id, // Correction: userId au lieu de Id_Client
-      productId: product2.id, // Correction: productId au lieu de Id_Product
+      userId: user2.id,
+      productId: product2.id,
     },
   });
 
-  // Seed Cart Items (avec un problème potentiel: relation unique entre Product et Cart_Item)
+  // Seed Cart Items
   await prisma.cart_Item.create({
     data: {
-      quantitee: "2", // Convertie en string pour correspondre au schéma
-      productId: product1.id, // Correction: productId au lieu de Id_Product
-      cartId: cart1.id, // Correction: cartId au lieu de Id_Cart
-    },
-  });
-
-  // Assign Categories to Products
-  await prisma.assigner.create({
-    data: {
-      productId: product1.id, // Correction: productId au lieu de Id_Product
-      categoryId: category1.id, // Correction: categoryId au lieu de Id_Category
-    },
-  });
-  await prisma.assigner.create({
-    data: {
-      productId: product2.id, // Correction: productId au lieu de Id_Product
-      categoryId: category2.id, // Correction: categoryId au lieu de Id_Category
+      quantitee: 2,
+      productId: product1.id,
+      cartId: cart1.id,
     },
   });
 }
