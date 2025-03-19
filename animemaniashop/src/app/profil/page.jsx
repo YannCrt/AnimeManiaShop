@@ -33,7 +33,7 @@ const ProfilePage = () => {
     router.push("/"); // Redirige vers la page d'accueil
   };
 
-  if (!user) return <p>Chargement...</p>;
+  if (!user) return <p className="loading">Chargement...</p>;
 
   return (
     <div className="profile-container">

@@ -7,7 +7,7 @@ export default async function ShopPage() {
   const products = await getAllProducts();
   return (
     <>
-      <h1>Shop Page</h1>
+      <h1 className="h1-shop">Nos figurines</h1>
       <div className="products">
         {products.map((product) => (
           <div key={product.id} className="product-card">
@@ -21,6 +21,7 @@ export default async function ShopPage() {
             </Link>
             <div>{product.name} </div>
             <div>{product.description} </div>
+            <div>Stock : {product.stock} </div>
             <div>Prix : {product.price} €</div>
           </div>
         ))}

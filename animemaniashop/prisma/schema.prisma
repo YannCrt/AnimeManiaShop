@@ -20,15 +20,22 @@ model User {
   id              Int       @id @default(autoincrement()) @map("Id_User")
   firstname       String    @db.VarChar(255)
   lastname        String    @db.VarChar(255)
-  email            String    @db.VarChar(255) @unique
-  password  String    @db.VarChar(255)
-  role      String    @db.VarChar(255)
-  adress    String    @db.VarChar(255)
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  cart      Cart?
-  avis      Avis[]
-  favoris   Favoris[]
+  email           String    @db.VarChar(255) @unique
+  password        String    @db.VarChar(255)
+  role            String    @db.VarChar(255)
+  adress          String    @db.VarChar(255)
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  review          Review[]
+  favoris         Favorite[]
+}
+
+model Cart {
+  id             Int         @id @default(autoincrement()) @map("Id_Cart")
+  date_creation  DateTime    @default(now())  // Utiliser @default(now()) pour simplifier
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+  cartItems      Cart_Item[]
 }
 
 model Category {
@@ -59,25 +66,16 @@ model Product {
   updatedAt   DateTime   @updatedAt
   anime       Anime      @relation(fields: [animeId], references: [id])
   animeId     Int        @map("Id_Anime")
-  avis        Avis[]
-  favoris     Favoris[]
-  cartItem    Cart_Item?
+  review        Review[]
+  favoris     Favorite[]
+  cartItem    Cart_Item[]
 }
 
-model Cart {
-  id            Int         @id @default(autoincrement()) @map("Id_Cart")
-  date_creation DateTime
-  createdAt     DateTime    @default(now())
-  updatedAt     DateTime    @updatedAt
-  user          User        @relation(fields: [userId], references: [id])
-  userId        Int         @unique @map("Id_User")
-  cartItems     Cart_Item[]
-}
 
-model Avis {
-  id        Int      @id @default(autoincrement()) @map("Id_Avis")
-  note      String   @db.VarChar(255)
-  date_avis DateTime
+model Review {
+  id        Int      @id @default(autoincrement()) @map("Id_Review")
+  note      Int   
+  date_review DateTime
   content   String   @db.VarChar(255)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -87,9 +85,8 @@ model Avis {
   userId    Int      @map("Id_User")
 }
 
-model Favoris {
-  id         Int      @id @default(autoincrement()) @map("Id_Favoris")
-  date_ajout DateTime
+model Favorite {
+  id         Int      @id @default(autoincrement()) @map("Id_Favorite")
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
   user       User     @relation(fields: [userId], references: [id])
@@ -104,7 +101,7 @@ model Cart_Item {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   product   Product  @relation(fields: [productId], references: [id])
-  productId Int      @unique @map("Id_Product")
+  productId Int      @map("Id_Product")
   cart      Cart     @relation(fields: [cartId], references: [id])
   cartId    Int      @map("Id_Cart")
 }

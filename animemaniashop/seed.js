@@ -2,7 +2,7 @@ const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 
 async function main() {
-  //Seed Users
+  // Seed Users
   const user1 = await prisma.user.create({
     data: {
       firstname: "Jean",
@@ -36,21 +36,18 @@ async function main() {
     data: { category_name: "Combat" },
   });
 
-  //Seed Anime
+  // Seed Anime
   const anime1 = await prisma.anime.create({
-    data: { Anime_name: "One Piece", manga_category: category1.category_name },
+    data: { Anime_name: "One Piece" },
   });
   const anime2 = await prisma.anime.create({
-    data: { Anime_name: "Bleach", manga_category: category2.category_name },
+    data: { Anime_name: "Bleach" },
   });
   const anime3 = await prisma.anime.create({
-    data: { Anime_name: "Naruto", manga_category: category2.category_name },
+    data: { Anime_name: "Naruto" },
   });
   const anime4 = await prisma.anime.create({
-    data: {
-      Anime_name: "Dragon Ball",
-      manga_category: category3.category_name,
-    },
+    data: { Anime_name: "Dragon Ball" },
   });
 
   // Seed Products
@@ -110,20 +107,20 @@ async function main() {
   // Il n'est pas possible de créer deux carts pour deux utilisateurs différents
 
   // Seed Reviews (Avis)
-  await prisma.avis.create({
+  await prisma.review.create({
     data: {
       note: "5", // Remarque: la note est une string dans votre schéma, pas un nombre
-      date_avis: new Date(),
+      date_review: new Date(),
       content: "Superbe figurine, excellente qualité!",
       productId: product1.id, // Correction: productId au lieu de Id_Product
       userId: user1.id, // Correction: userId au lieu de Id_Client
     },
   });
 
-  await prisma.avis.create({
+  await prisma.review.create({
     data: {
       note: "4", // Remarque: la note est une string dans votre schéma, pas un nombre
-      date_avis: new Date(),
+      date_review: new Date(),
       content: "Belle figurine, mais un peu petite.",
       productId: product2.id, // Correction: productId au lieu de Id_Product
       userId: user2.id, // Correction: userId au lieu de Id_Client
@@ -131,16 +128,19 @@ async function main() {
   });
 
   // Seed Favorites (Favoris)
-  await prisma.favoris.create({
+  await prisma.favorite.create({
     data: {
-      date_ajout: new Date(),
+      createdAt: new Date(),
+      updatedAt: new Date(),
       userId: user1.id, // Correction: userId au lieu de Id_Client
       productId: product1.id, // Correction: productId au lieu de Id_Product
     },
   });
-  await prisma.favoris.create({
+
+  await prisma.favorite.create({
     data: {
-      date_ajout: new Date(),
+      createdAt: new Date(),
+      updatedAt: new Date(),
       userId: user2.id, // Correction: userId au lieu de Id_Client
       productId: product2.id, // Correction: productId au lieu de Id_Product
     },
@@ -149,23 +149,28 @@ async function main() {
   // Seed Cart Items (avec un problème potentiel: relation unique entre Product et Cart_Item)
   await prisma.cart_Item.create({
     data: {
-      quantitee: "2", // Convertie en string pour correspondre au schéma
+      quantitee: 2, // correction : ne pas mettre "2" en string, mais en nombre
       productId: product1.id, // Correction: productId au lieu de Id_Product
       cartId: cart1.id, // Correction: cartId au lieu de Id_Cart
     },
   });
 
-  // Assign Categories to Products
-  await prisma.assigner.create({
+  // Assign Categories to Products (gérer les relations directement)
+  await prisma.product.update({
+    where: { id: product1.id },
     data: {
-      productId: product1.id, // Correction: productId au lieu de Id_Product
-      categoryId: category1.id, // Correction: categoryId au lieu de Id_Category
+      categories: {
+        connect: { id: category1.id }, // Associer product1 à la catégorie Aventure
+      },
     },
   });
-  await prisma.assigner.create({
+
+  await prisma.product.update({
+    where: { id: product2.id },
     data: {
-      productId: product2.id, // Correction: productId au lieu de Id_Product
-      categoryId: category2.id, // Correction: categoryId au lieu de Id_Category
+      categories: {
+        connect: { id: category2.id }, // Associer product2 à la catégorie Action
+      },
     },
   });
 }

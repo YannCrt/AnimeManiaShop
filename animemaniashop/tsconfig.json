@@ -28,7 +28,12 @@
     "next-env.d.ts",
     ".next/types/**/*.ts",
     "**/*.ts",
-    "**/*.tsx"
+    "**/*.tsx",
+    "src/app/api/register/route.js",
+    "src/app/signup/page.jsx",
+    "src/app/signup/page.jsx",
+    "src/app/login/page.jsx",
+    "src/app/login/page.jsx"
   ],
   "exclude": [
     "node_modules"
