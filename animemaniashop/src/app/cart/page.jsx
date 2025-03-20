@@ -136,7 +136,7 @@ function CartPage() {
                 </div>
 
                 <div className="cart-item-details flex-grow">
-                  <h3 className="font-semibold">{item.product.name}</h3>
+                  <h3 className="font-semibold"><a href={`/product/${item.product.id}`}>{item.product.name}</a></h3>
                   <p className="text-sm text-gray-600">
                     {item.product.description}
                   </p>

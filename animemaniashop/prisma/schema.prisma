@@ -32,7 +32,6 @@ model User {
 
 model Cart {
   id             Int         @id @default(autoincrement()) @map("Id_Cart")
-  date_creation  DateTime    @default(now())  // Utiliser @default(now()) pour simplifier
   createdAt      DateTime    @default(now())
   updatedAt      DateTime    @updatedAt
   cartItems      Cart_Item[]

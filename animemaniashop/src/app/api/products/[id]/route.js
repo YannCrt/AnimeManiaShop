@@ -1,11 +1,12 @@
-// /app/api/products/[id]/route.js
 import { NextResponse } from "next/server";
 import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
+
 export async function GET(request, context) {
   try {
-    const { params } = context; // Déstructure params
+    // Await context.params properly
+    const params = await context.params;
     const id = parseInt(params.id, 10);
 
     if (isNaN(id)) {

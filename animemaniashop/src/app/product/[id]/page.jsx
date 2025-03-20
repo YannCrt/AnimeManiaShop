@@ -2,13 +2,11 @@
 "use client";
 import { useState, useEffect } from "react";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
 import { useParams } from "next/navigation";
 
 export default function ProductPage() {
   const params = useParams();
   const productId = params.id;
-  const router = useRouter();
   const [product, setProduct] = useState(null);
   const [quantity, setQuantity] = useState(1);
   const [loading, setLoading] = useState(true);

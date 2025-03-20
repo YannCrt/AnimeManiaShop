@@ -10,7 +10,7 @@ async function main() {
       email: "jean.dupont2@mail.com",
       password: "hashedpassword1",
       role: "user",
-      adress: "123 rue de Paris", // Notez que le champ est "adress" dans votre schéma (avec un seul 'd')
+      adress: "123 rue de Paris",
     },
   });
 
@@ -21,7 +21,7 @@ async function main() {
       email: "alice.martin2@mail.com",
       password: "hashedpassword2",
       role: "admin",
-      adress: "456 avenue de Lyon", // Notez que le champ est "adress" dans votre schéma (avec un seul 'd')
+      adress: "456 avenue de Lyon",
     },
   });
 
@@ -95,35 +95,40 @@ async function main() {
     },
   });
 
-  // Seed Carts
+  // Seed Carts (sans utilisateur associé, panier anonyme)
   const cart1 = await prisma.cart.create({
     data: {
-      date_creation: new Date(),
-      userId: user1.id, // Correction: userId au lieu de Id_Client
+      createdAt: new Date("2025-03-20T10:21:55.671Z"),
+      updatedAt: new Date("2025-03-20T10:21:55.671Z"),
+      cartItems: {
+        create: [
+          {
+            quantitee: 2, // correction de type
+            productId: product1.id,
+          },
+        ],
+      },
     },
   });
-
-  // Remarque: Le modèle User a une relation unique avec Cart, donc un seul cart par utilisateur
-  // Il n'est pas possible de créer deux carts pour deux utilisateurs différents
 
   // Seed Reviews (Avis)
   await prisma.review.create({
     data: {
-      note: "5", // Remarque: la note est une string dans votre schéma, pas un nombre
+      note: 5, // La note est un entier
       date_review: new Date(),
       content: "Superbe figurine, excellente qualité!",
-      productId: product1.id, // Correction: productId au lieu de Id_Product
-      userId: user1.id, // Correction: userId au lieu de Id_Client
+      productId: product1.id, 
+      userId: user1.id,
     },
   });
 
   await prisma.review.create({
     data: {
-      note: "4", // Remarque: la note est une string dans votre schéma, pas un nombre
+      note: 4, // La note est un entier
       date_review: new Date(),
       content: "Belle figurine, mais un peu petite.",
-      productId: product2.id, // Correction: productId au lieu de Id_Product
-      userId: user2.id, // Correction: userId au lieu de Id_Client
+      productId: product2.id, 
+      userId: user2.id,
     },
   });
 
@@ -132,8 +137,8 @@ async function main() {
     data: {
       createdAt: new Date(),
       updatedAt: new Date(),
-      userId: user1.id, // Correction: userId au lieu de Id_Client
-      productId: product1.id, // Correction: productId au lieu de Id_Product
+      userId: user1.id, 
+      productId: product1.id, 
     },
   });
 
@@ -141,35 +146,53 @@ async function main() {
     data: {
       createdAt: new Date(),
       updatedAt: new Date(),
-      userId: user2.id, // Correction: userId au lieu de Id_Client
-      productId: product2.id, // Correction: productId au lieu de Id_Product
+      userId: user2.id, 
+      productId: product2.id, 
     },
   });
 
   // Seed Cart Items (avec un problème potentiel: relation unique entre Product et Cart_Item)
   await prisma.cart_Item.create({
     data: {
-      quantitee: 2, // correction : ne pas mettre "2" en string, mais en nombre
-      productId: product1.id, // Correction: productId au lieu de Id_Product
-      cartId: cart1.id, // Correction: cartId au lieu de Id_Cart
+      quantitee: 2, // correction du type
+      productId: product1.id, 
+      cartId: cart1.id, 
     },
   });
 
-  // Assign Categories to Products (gérer les relations directement)
-  await prisma.product.update({
-    where: { id: product1.id },
+  // Assign Categories to Animes
+  await prisma.anime.update({
+    where: { id: anime1.id },
     data: {
       categories: {
-        connect: { id: category1.id }, // Associer product1 à la catégorie Aventure
+        connect: { id: category1.id }, // Associer anime1 à la catégorie Aventure
       },
     },
   });
 
-  await prisma.product.update({
-    where: { id: product2.id },
+  await prisma.anime.update({
+    where: { id: anime2.id },
     data: {
       categories: {
-        connect: { id: category2.id }, // Associer product2 à la catégorie Action
+        connect: { id: category2.id }, // Associer anime2 à la catégorie Action
+      },
+    },
+  });
+
+  await prisma.anime.update({
+    where: { id: anime3.id },
+    data: {
+      categories: {
+        connect: { id: category3.id }, // Associer anime3 à la catégorie Combat
+      },
+    },
+  });
+
+  await prisma.anime.update({
+    where: { id: anime4.id },
+    data: {
+      categories: {
+        connect: { id: category1.id }, // Associer anime4 à la catégorie Aventure
       },
     },
   });
