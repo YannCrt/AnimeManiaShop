@@ -38,16 +38,32 @@ async function main() {
 
   // Seed Anime
   const anime1 = await prisma.anime.create({
-    data: { Anime_name: "One Piece" },
+    data: {
+      Anime_name: "One Piece",
+      categories: { connect: { id: category1.id } },
+    },
   });
   const anime2 = await prisma.anime.create({
-    data: { Anime_name: "Bleach" },
+    data: {
+      Anime_name: "Bleach",
+      categories: { connect: { id: category2.id } },
+    },
   });
   const anime3 = await prisma.anime.create({
-    data: { Anime_name: "Naruto" },
+    data: {
+      Anime_name: "Naruto",
+      categories: { connect: { id: category3.id } },
+      categories: { connect: { id: category2.id } },
+    },
   });
   const anime4 = await prisma.anime.create({
-    data: { Anime_name: "Dragon Ball" },
+    data: {
+      Anime_name: "Dragon Ball",
+      categories: {
+        connect: { id: category1.id },
+        connect: { id: category2.id },
+      },
+    },
   });
 
   // Seed Products
