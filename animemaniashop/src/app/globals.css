@@ -578,6 +578,11 @@ body {
 .cart-page {
   padding: 20px;
   font-family: Arial, sans-serif;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 h1 {
