@@ -13,6 +13,7 @@
   --black-color: #000000;
   --background-color: #f4f4f4;
   --text-color: #333;
+  --footer-color: #ffffff;
 
   /* Variables d'interface */
   --box-shadow-sm: 0px 4px 10px rgba(0, 0, 0, 0.2);
@@ -141,13 +142,9 @@ body {
   display: flex;
   flex-direction: row;
   align-items: center;
-  background: linear-gradient(
-    135deg,
-    var(--primary-color),
-    var(--primary-color-dark)
-  );
+  background-color: var(--footer-color);
   height: 10rem;
-  color: var(--white-color);
+  color: var(--black-color);
   justify-content: center;
 }
 
@@ -159,7 +156,11 @@ body {
 
 .copyright {
   display: flex;
-  background-color: var(--black-color);
+  background: linear-gradient(
+    135deg,
+    var(--primary-color),
+    var(--primary-color-dark)
+  );
   color: #464545;
   justify-content: center;
   align-items: center;
@@ -638,6 +639,11 @@ h1 {
 
 .checkout-btn:hover {
   background-color: #0056b3;
+}
+
+.container-products {
+  padding: 1.5rem;
+  margin: 5rem;
 }
 
 .product-card {

@@ -6,7 +6,7 @@ import { getAllProducts } from "../../../lib/product.action";
 export default async function ShopPage() {
   const products = await getAllProducts();
   return (
-    <>
+    <div className="container-products">
       <h1 className="h1-shop">Nos figurines</h1>
       <div className="products">
         {products.map((product) => (
@@ -26,6 +26,6 @@ export default async function ShopPage() {
           </div>
         ))}
       </div>
-    </>
+    </div>
   );
 }
