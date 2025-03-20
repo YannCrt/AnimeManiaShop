@@ -20,7 +20,7 @@ async function main() {
       lastname: "Martin",
       email: "alice.martin2@mail.com",
       password: "hashedpassword2",
-      role: "admin",
+      role: "user",
       adress: "456 avenue de Lyon",
     },
   });

@@ -6,7 +6,9 @@ const prisma = new PrismaClient();
 
 export async function GET() {
   try {
-    const token = cookies().get("token")?.value;
+    const cookieStore = await cookies();
+    const token = cookieStore.get("token")?.value;
+
     if (!token) {
       return Response.json({ message: "Non autorisé" }, { status: 401 });
     }
@@ -24,7 +26,10 @@ export async function GET() {
     });
 
     if (!user) {
-      return Response.json({ message: "Utilisateur non trouvé" }, { status: 404 });
+      return Response.json(
+        { message: "Utilisateur non trouvé" },
+        { status: 404 }
+      );
     }
 
     return Response.json({ user });
@@ -36,7 +41,9 @@ export async function GET() {
 
 export async function PUT(req) {
   try {
-    const token = cookies().get("token")?.value;
+    const cookieStore = await cookies();
+    const token = cookieStore.get("token")?.value;
+
     if (!token) {
       return Response.json({ message: "Non autorisé" }, { status: 401 });
     }
@@ -51,7 +58,10 @@ export async function PUT(req) {
 
     // Validation des données
     if (!firstname || !lastname || !email || !adress) {
-      return Response.json({ message: "Tous les champs sont obligatoires" }, { status: 400 });
+      return Response.json(
+        { message: "Tous les champs sont obligatoires" },
+        { status: 400 }
+      );
     }
 
     // Mise à jour de l'utilisateur
