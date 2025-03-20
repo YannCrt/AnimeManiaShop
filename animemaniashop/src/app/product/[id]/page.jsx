@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import { revalidatePath } from "next/cache";
 import {
   getProductById,
@@ -33,48 +34,105 @@ export default async function ProductDetailPage({ params }) {
     }
   }
 
+  // Fonction pour générer les étoiles selon la note
+  const renderStars = (note) => {
+    const stars = [];
+    for (let i = 1; i <= 5; i++) {
+      if (i <= note) {
+        stars.push("★"); // Étoile pleine
+      } else {
+        stars.push("☆"); // Étoile vide
+      }
+    }
+    return stars.join("");
+  };
+
   return (
-    <div className="product-detail">
-      <h1>{product.name}</h1>
-      <div className="product-image">
-        <Image
-          src={product.image_url}
-          alt={product.name}
-          width={400}
-          height={400}
-          priority
-        />
-      </div>
-      <div className="product-info">
-        <p className="description">{product.description}</p>
-        <p className="anime">Anime: {product.anime.Anime_name}</p>
-        <p className="price">Prix: {product.price} €</p>
-        <p className="stock">Stock disponible: {product.stock}</p>
-
-        {product.anime.categories && product.anime.categories.length > 0 && (
-          <div className="categories">
-            <p>Catégories:</p>
-            <ul>
-              {product.anime.categories.map((category) => (
-                <li key={category.id}>{category.category_name}</li>
-              ))}
-            </ul>
+    <div>
+      <div className="product-detail container mx-auto p-4">
+        <h1 className="product-title text-2xl font-bold mb-4">
+          {product.name}
+        </h1>
+        <div className="flex flex-col md:flex-row gap-8">
+          <div className="product-image w-full md:w-1/2">
+            <Image
+              src={product.image_url}
+              alt={product.name}
+              width={400}
+              height={400}
+              objectFit="cover"
+              className="rounded-lg"
+            />
           </div>
-        )}
 
-        {isLoggedIn && (
-          <div className="add-avis-form">
-            <h3>Ajouter votre avis</h3>
-            <form action={handleAddAvis}>
+          <div className="product-info w-full md:w-1/2">
+            <p className="product-description mb-4">{product.description}</p>
+
+            <p className="product-price text-xl font-semibold mb-4">
+              Prix : {product.price} €
+            </p>
+
+            <p className="stock-info mb-4">
+              En stock :{" "}
+              <span
+                className={
+                  product.stock > 10 ? "text-green-600" : "text-red-600"
+                }
+              >
+                {product.stock} disponible(s)
+              </span>
+            </p>
+
+            <div className="quantity mb-4">
+              <label htmlFor="quantity" className="block mb-2">
+                Quantité :{" "}
+              </label>
+              <input
+                type="number"
+                id="quantity"
+                min="1"
+                defaultValue="1"
+                max={product.stock}
+                className="quantity-input p-2 border rounded w-20"
+              />
+            </div>
+
+            <button
+              className={`add-to-cart py-2 px-4 rounded ${
+                product.stock > 0
+                  ? "bg-blue-600 text-white hover:bg-blue-700"
+                  : "bg-gray-400 cursor-not-allowed"
+              }`}
+            >
+              Ajouter au panier
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div className="reviews-container">
+        <h2 className="reviews-title">Avis des clients</h2>
+
+        {isLoggedIn ? (
+          <div className="review-form-container">
+            <h3 className="form-title">Ajouter votre avis</h3>
+            <form action={handleAddAvis} className="review-form">
               <div className="form-group">
-                <label htmlFor="note">Note (1-5):</label>
-                <select id="note" name="note" required className="form-control">
-                  <option value="1">1</option>
-                  <option value="2">2</option>
-                  <option value="3">3</option>
-                  <option value="4">4</option>
-                  <option value="5">5</option>
-                </select>
+                <label htmlFor="note">Note:</label>
+                <div className="star-rating">
+                  <select
+                    id="note"
+                    name="note"
+                    required
+                    className="form-control"
+                  >
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                  </select>
+                </div>
               </div>
               <div className="form-group">
                 <label htmlFor="content">Votre avis:</label>
@@ -83,36 +141,61 @@ export default async function ProductDetailPage({ params }) {
                   name="content"
                   required
                   className="form-control"
-                  rows="2"
+                  rows="3"
+                  placeholder="Partagez votre expérience avec ce produit..."
                 ></textarea>
               </div>
-              <button type="submit" className="submit-avis">
-                Envoyer
+              <button
+                type="submit"
+                className="action-button submit-review-button"
+              >
+                Envoyer mon avis
               </button>
             </form>
-            <br />
+          </div>
+        ) : (
+          <div className="login-to-review">
+            <p>Vous souhaitez partager votre avis sur ce produit ?</p>
+            <Link href="/login" className="login-link">
+              Connectez-vous pour ajouter un avis
+            </Link>
           </div>
         )}
 
-        <div className="avis">
-          <p>Avis :</p>
+        <div className="reviews-list">
+          {avis.length > 0 ? (
+            <div className="reviews-count">{avis.length} avis</div>
+          ) : null}
+
           {avis.length > 0 ? (
             avis.map((avi) => (
-              <div key={avi.id} className="avis-item">
-                <p className="avis-user">
-                  {avi.user.firstname} {avi.user.lastname}
-                </p>
-                <p className="avis-note">Note : {avi.note}</p>
-                <p className="avis-content">{avi.content}</p>
-                <br />
+              <div key={avi.id} className="review-card">
+                <div className="review-header">
+                  <div className="review-user">
+                    {avi.user.firstname} {avi.user.lastname}
+                  </div>
+                  <div className="review-date">
+                    {/* Si vous avez une date, vous pouvez l'afficher ici */}
+                  </div>
+                </div>
+                <div className="review-stars">
+                  <span className="stars">{renderStars(avi.note)}</span>
+                  <span className="note-value">{avi.note}/5</span>
+                </div>
+                <div className="review-content">
+                  <p>"{avi.content}"</p>
+                </div>
               </div>
             ))
           ) : (
-            <p>Aucun avis pour le moment</p>
+            <div className="no-reviews">
+              <p>
+                Aucun avis pour le moment. Soyez le premier à donner votre avis
+                !
+              </p>
+            </div>
           )}
         </div>
-
-        <button className="add-to-cart">Ajouter au panier</button>
       </div>
     </div>
   );

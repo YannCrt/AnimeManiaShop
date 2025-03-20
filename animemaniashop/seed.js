@@ -2,7 +2,7 @@ const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 
 async function main() {
-  //Seed Users
+  // Seed Users
   const user1 = await prisma.user.create({
     data: {
       firstname: "Jean",
@@ -20,7 +20,7 @@ async function main() {
       lastname: "Martin",
       email: "alice.martin2@mail.com",
       password: "hashedpassword2",
-      role: "user",
+      role: "admin",
       adress: "456 avenue de Lyon",
     },
   });
@@ -36,33 +36,18 @@ async function main() {
     data: { category_name: "Combat" },
   });
 
-  //Seed Anime
+  // Seed Anime
   const anime1 = await prisma.anime.create({
-    data: {
-      Anime_name: "One Piece",
-      categories: { connect: { id: category1.id } },
-    },
+    data: { Anime_name: "One Piece" },
   });
-
   const anime2 = await prisma.anime.create({
-    data: {
-      Anime_name: "Bleach",
-      categories: { connect: { id: category2.id } },
-    },
+    data: { Anime_name: "Bleach" },
   });
-
   const anime3 = await prisma.anime.create({
-    data: {
-      Anime_name: "Naruto",
-      categories: { connect: { id: category2.id } },
-    },
+    data: { Anime_name: "Naruto" },
   });
-
   const anime4 = await prisma.anime.create({
-    data: {
-      Anime_name: "Dragon Ball",
-      categories: { connect: { id: category3.id } },
-    },
+    data: { Anime_name: "Dragon Ball" },
   });
 
   // Seed Products
@@ -110,29 +95,37 @@ async function main() {
     },
   });
 
-  // Seed Carts
+  // Seed Carts (sans utilisateur associé, panier anonyme)
   const cart1 = await prisma.cart.create({
     data: {
-      date_creation: new Date(),
-      userId: user1.id,
+      createdAt: new Date("2025-03-20T10:21:55.671Z"),
+      updatedAt: new Date("2025-03-20T10:21:55.671Z"),
+      cartItems: {
+        create: [
+          {
+            quantitee: 2, // correction de type
+            productId: product1.id,
+          },
+        ],
+      },
     },
   });
 
   // Seed Reviews (Avis)
-  await prisma.avis.create({
+  await prisma.review.create({
     data: {
-      note: "5",
-      date_avis: new Date(),
+      note: 5, // La note est un entier
+      date_review: new Date(),
       content: "Superbe figurine, excellente qualité!",
       productId: product1.id,
       userId: user1.id,
     },
   });
 
-  await prisma.avis.create({
+  await prisma.review.create({
     data: {
-      note: "4",
-      date_avis: new Date(),
+      note: 4, // La note est un entier
+      date_review: new Date(),
       content: "Belle figurine, mais un peu petite.",
       productId: product2.id,
       userId: user2.id,
@@ -140,27 +133,67 @@ async function main() {
   });
 
   // Seed Favorites (Favoris)
-  await prisma.favoris.create({
+  await prisma.favorite.create({
     data: {
-      date_ajout: new Date(),
+      createdAt: new Date(),
+      updatedAt: new Date(),
       userId: user1.id,
       productId: product1.id,
     },
   });
-  await prisma.favoris.create({
+
+  await prisma.favorite.create({
     data: {
-      date_ajout: new Date(),
+      createdAt: new Date(),
+      updatedAt: new Date(),
       userId: user2.id,
       productId: product2.id,
     },
   });
 
-  // Seed Cart Items
+  // Seed Cart Items (avec un problème potentiel: relation unique entre Product et Cart_Item)
   await prisma.cart_Item.create({
     data: {
-      quantitee: 2,
+      quantitee: 2, // correction du type
       productId: product1.id,
       cartId: cart1.id,
+    },
+  });
+
+  // Assign Categories to Animes
+  await prisma.anime.update({
+    where: { id: anime1.id },
+    data: {
+      categories: {
+        connect: { id: category1.id }, // Associer anime1 à la catégorie Aventure
+      },
+    },
+  });
+
+  await prisma.anime.update({
+    where: { id: anime2.id },
+    data: {
+      categories: {
+        connect: { id: category2.id }, // Associer anime2 à la catégorie Action
+      },
+    },
+  });
+
+  await prisma.anime.update({
+    where: { id: anime3.id },
+    data: {
+      categories: {
+        connect: { id: category3.id }, // Associer anime3 à la catégorie Combat
+      },
+    },
+  });
+
+  await prisma.anime.update({
+    where: { id: anime4.id },
+    data: {
+      categories: {
+        connect: { id: category1.id }, // Associer anime4 à la catégorie Aventure
+      },
     },
   });
 }

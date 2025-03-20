@@ -17,7 +17,7 @@ export async function getProductById(id) {
           categories: true,
         },
       },
-      avis: true,
+      review: true,
       favoris: true,
       cartItem: true,
     },
@@ -25,7 +25,7 @@ export async function getProductById(id) {
 }
 
 export async function getAvisbyProductID(productId) {
-  return await prisma.avis.findMany({
+  return await prisma.review.findMany({
     where: { productId: productId },
     include: {
       user: true,
@@ -67,10 +67,10 @@ export async function addAvis(productId, note, content) {
       throw new Error("Vous devez être connecté pour ajouter un avis.");
     }
 
-    return await prisma.avis.create({
+    return await prisma.review.create({
       data: {
         note: note,
-        date_avis: new Date(),
+        date_review: new Date(),
         content: content,
         productId: parseInt(productId),
         userId: user.id,
