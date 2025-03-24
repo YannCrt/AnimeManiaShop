@@ -136,7 +136,11 @@ function CartPage() {
                 </div>
 
                 <div className="cart-item-details flex-grow">
-                  <h3 className="font-semibold"><a href={`/product/${item.product.id}`}>{item.product.name}</a></h3>
+                  <h3 className="font-semibold">
+                    <a href={`/product/${item.product.id}`}>
+                      {item.product.name}
+                    </a>
+                  </h3>
                   <p className="text-sm text-gray-600">
                     {item.product.description}
                   </p>
@@ -207,11 +211,8 @@ function CartPage() {
               >
                 Continuer vos achats
               </Link>
-              <button
-                className="checkout-btn bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 flex-grow"
-                onClick={checkout}
-              >
-                Passer à la caisse
+              <button className="checkout-btn bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 flex-grow">
+                <a href="/command">Passer à la caisse</a>
               </button>
             </div>
           </div>

@@ -38,16 +38,32 @@ async function main() {
 
   // Seed Anime
   const anime1 = await prisma.anime.create({
-    data: { Anime_name: "One Piece" },
+    data: {
+      Anime_name: "One Piece",
+      categories: { connect: { id: category1.id } },
+    },
   });
   const anime2 = await prisma.anime.create({
-    data: { Anime_name: "Bleach" },
+    data: {
+      Anime_name: "Bleach",
+      categories: { connect: { id: category2.id } },
+    },
   });
   const anime3 = await prisma.anime.create({
-    data: { Anime_name: "Naruto" },
+    data: {
+      Anime_name: "Naruto",
+      categories: { connect: { id: category3.id } },
+      categories: { connect: { id: category2.id } },
+    },
   });
   const anime4 = await prisma.anime.create({
-    data: { Anime_name: "Dragon Ball" },
+    data: {
+      Anime_name: "Dragon Ball",
+      categories: {
+        connect: { id: category1.id },
+        connect: { id: category2.id },
+      },
+    },
   });
 
   // Seed Products
@@ -117,7 +133,7 @@ async function main() {
       note: 5, // La note est un entier
       date_review: new Date(),
       content: "Superbe figurine, excellente qualité!",
-      productId: product1.id, 
+      productId: product1.id,
       userId: user1.id,
     },
   });
@@ -127,7 +143,7 @@ async function main() {
       note: 4, // La note est un entier
       date_review: new Date(),
       content: "Belle figurine, mais un peu petite.",
-      productId: product2.id, 
+      productId: product2.id,
       userId: user2.id,
     },
   });
@@ -137,8 +153,8 @@ async function main() {
     data: {
       createdAt: new Date(),
       updatedAt: new Date(),
-      userId: user1.id, 
-      productId: product1.id, 
+      userId: user1.id,
+      productId: product1.id,
     },
   });
 
@@ -146,8 +162,8 @@ async function main() {
     data: {
       createdAt: new Date(),
       updatedAt: new Date(),
-      userId: user2.id, 
-      productId: product2.id, 
+      userId: user2.id,
+      productId: product2.id,
     },
   });
 
@@ -155,8 +171,8 @@ async function main() {
   await prisma.cart_Item.create({
     data: {
       quantitee: 2, // correction du type
-      productId: product1.id, 
-      cartId: cart1.id, 
+      productId: product1.id,
+      cartId: cart1.id,
     },
   });
 
@@ -166,33 +182,6 @@ async function main() {
     data: {
       categories: {
         connect: { id: category1.id }, // Associer anime1 à la catégorie Aventure
-      },
-    },
-  });
-
-  await prisma.anime.update({
-    where: { id: anime2.id },
-    data: {
-      categories: {
-        connect: { id: category2.id }, // Associer anime2 à la catégorie Action
-      },
-    },
-  });
-
-  await prisma.anime.update({
-    where: { id: anime3.id },
-    data: {
-      categories: {
-        connect: { id: category3.id }, // Associer anime3 à la catégorie Combat
-      },
-    },
-  });
-
-  await prisma.anime.update({
-    where: { id: anime4.id },
-    data: {
-      categories: {
-        connect: { id: category1.id }, // Associer anime4 à la catégorie Aventure
       },
     },
   });

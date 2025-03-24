@@ -11,14 +11,14 @@ async function getOrCreateCartId() {
     // Créons un panier temporaire dans la base de données
     // Nous n'avons plus besoin de spécifier date_creation car createdAt est automatique
     const tempCart = await prisma.cart.create({
-      data: {} // Aucun champ à spécifier car createdAt et updatedAt sont automatiques
+      data: {}, // Aucun champ à spécifier car createdAt et updatedAt sont automatiques
     });
 
     // Log pour vérifier si le panier est bien créé
     console.log("Panier créé avec succès :", tempCart);
 
     cartId = tempCart.id.toString();
-    
+
     // Nous allons retourner le nouveau cartId et l'indiquer pour définir le cookie dans la réponse
     return { cartId: parseInt(cartId), isNew: true };
   }
@@ -32,12 +32,12 @@ async function getOrCreateCartId() {
   console.log("Vérification du panier dans la base de données :", existingCart);
 
   if (!existingCart) {
-    // Si le panier n'existe pas dans la BD mais existe dans le cookie, 
+    // Si le panier n'existe pas dans la BD mais existe dans le cookie,
     // créons un nouveau panier
     const newCart = await prisma.cart.create({
-      data: {} // Aucun champ à spécifier car createdAt et updatedAt sont automatiques
+      data: {}, // Aucun champ à spécifier car createdAt et updatedAt sont automatiques
     });
-    
+
     console.log("Nouveau panier créé pour remplacer celui manquant :", newCart);
     return { cartId: newCart.id, isNew: true };
   }
@@ -50,7 +50,7 @@ async function getOrCreateCartId() {
 export async function GET() {
   try {
     const { cartId, isNew } = await getOrCreateCartId();
-    
+
     // Récupérons les articles du panier avec les informations de produit
     const cartItems = await prisma.cart_Item.findMany({
       where: {
@@ -60,17 +60,17 @@ export async function GET() {
         product: true,
       },
     });
-    
+
     const response = NextResponse.json({ cartItems });
-    
+
     // Si c'est un nouveau panier, définissons le cookie
     if (isNew) {
-      response.cookies.set("cartId", cartId.toString(), { 
+      response.cookies.set("cartId", cartId.toString(), {
         maxAge: 30 * 24 * 60 * 60,
-        path: '/'
+        path: "/",
       });
     }
-    
+
     return response;
   } catch (error) {
     console.error("Erreur lors de la récupération du panier:", error);
@@ -82,7 +82,7 @@ export async function GET() {
 export async function POST(request) {
   try {
     const { productId, quantity } = await request.json();
-    
+
     const { cartId, isNew } = await getOrCreateCartId();
 
     // Vérifions d'abord le stock disponible
@@ -135,18 +135,18 @@ export async function POST(request) {
         stock: product.stock - quantity,
       },
     });
-    
+
     // Créer la réponse
     const response = NextResponse.json({ success: true, cartItem });
-    
+
     // Si c'est un nouveau panier, définissons le cookie
     if (isNew) {
-      response.cookies.set("cartId", cartId.toString(), { 
+      response.cookies.set("cartId", cartId.toString(), {
         maxAge: 30 * 24 * 60 * 60,
-        path: '/'
+        path: "/",
       });
     }
-    
+
     return response;
   } catch (error) {
     console.error("Erreur lors de l'ajout au panier:", error);

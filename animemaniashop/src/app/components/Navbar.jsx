@@ -18,9 +18,6 @@ const Navbar = () => {
       <div className="nav-links">
         <ul>
           <li>
-            <Link href="#search">Rechercher</Link>
-          </li>
-          <li>
             <a href="/shop">Shop</a>
           </li>
 
