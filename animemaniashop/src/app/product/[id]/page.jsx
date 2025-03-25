@@ -2,13 +2,16 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
-
+// Pas de modification nécessaire ici après l'ajout de deleteAvis dans product.action.js
 import {
   getProductById,
   getAvisbyProductID,
   addAvis,
   getCurrentUser,
+  deleteAvis, // L'importation fonctionne maintenant
 } from "../../../../lib/product.action";
+
+// Le reste du code de ProductDetailPage reste inchangé.
 
 export default function ProductDetailPage({ params }) {
   const [message, setMessage] = useState(null);
@@ -17,11 +20,10 @@ export default function ProductDetailPage({ params }) {
   const [avis, setAvis] = useState([]);
   const [currentUser, setCurrentUser] = useState(null);
 
-  // Handle the params and fetch the productId correctly
   useEffect(() => {
     async function fetchData() {
-      const resolvedParams = await params; // Await the Promise to resolve it
-      const productId = parseInt(resolvedParams.id); // Now it's safe to access `id`
+      const resolvedParams = await params;
+      const productId = parseInt(resolvedParams.id);
       setProductId(productId);
 
       const fetchedProduct = await getProductById(productId);
@@ -40,8 +42,7 @@ export default function ProductDetailPage({ params }) {
   }
 
   async function handleAddAvis(event) {
-    event.preventDefault(); // Empêche la page de se recharger
-
+    event.preventDefault();
     const formData = new FormData(event.target);
     const note = formData.get("note");
     const content = formData.get("content");
@@ -54,7 +55,7 @@ export default function ProductDetailPage({ params }) {
     try {
       await addAvis(productId, parseInt(note), content);
       setMessage("Avis ajouté avec succès !");
-      event.target.reset(); // Réinitialise le formulaire
+      event.target.reset();
 
       // Met à jour la liste des avis après l'ajout
       const updatedAvis = await getAvisbyProductID(productId);
@@ -65,7 +66,20 @@ export default function ProductDetailPage({ params }) {
     }
   }
 
-  // Fonction pour générer les étoiles selon la note
+  const handleDeleteAvis = async (avisId) => {
+    try {
+      // Appel à la fonction de suppression dans l'action
+      await deleteAvis(avisId);
+
+      // Si la suppression réussit, met à jour les avis
+      setAvis(avis.filter((avi) => avi.id !== avisId));
+      setMessage("Avis supprimé avec succès !");
+    } catch (error) {
+      console.error("Erreur lors de la suppression de l'avis:", error);
+      setMessage("Erreur lors de la suppression de l'avis.");
+    }
+  };
+
   const renderStars = (note) => {
     return "★".repeat(note) + "☆".repeat(5 - note);
   };
@@ -202,8 +216,24 @@ export default function ProductDetailPage({ params }) {
                   <span className="stars">{renderStars(avi.note)}</span>
                   <span className="note-value text-sm ml-2">{avi.note}/5</span>
                 </div>
-                <div className="review-content mt-2">
+                <div className="review-content">
                   <p>"{avi.content}"</p>
+                  {currentUser && currentUser.id === avi.user.id && (
+                    <div className="review-actions">
+                      <a
+                        className="review-edit-button "
+                        href={`${productId}/modifier-avis/${avi.id}`}
+                      >
+                        Modifier
+                      </a>
+                      <button
+                        className="review-delete-button"
+                        onClick={() => handleDeleteAvis(avi.id)}
+                      >
+                        Supprimer
+                      </button>
+                    </div>
+                  )}
                 </div>
               </div>
             ))

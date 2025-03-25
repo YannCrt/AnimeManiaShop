@@ -82,7 +82,86 @@ export async function addAvis(productId, note, content) {
   }
 }
 
-// Cette fonction sera implémentée plus tard pour gérer l'ajout au panier
-export async function addToCart(userId, productId, quantity) {
-  // Implémentation à venir quand vous serez prêt à gérer le panier
+// Ajoute cette fonction à la fin de ton fichier product.action.js
+
+export async function deleteAvis(avisId) {
+  try {
+    // Vérifier si l'avis existe avant de tenter de le supprimer
+    const avis = await prisma.review.findUnique({
+      where: { id: parseInt(avisId) },
+    });
+
+    if (!avis) {
+      throw new Error("L'avis n'existe pas.");
+    }
+
+    // Si l'avis existe, on procède à la suppression
+    await prisma.review.delete({
+      where: { id: parseInt(avisId) },
+    });
+
+    console.log("Avis supprimé avec succès");
+  } catch (error) {
+    console.error("Erreur lors de la suppression de l'avis:", error.message);
+    throw error; // Relance l'erreur ou retourne un message d'erreur selon le cas
+  }
+}
+export async function updateAvis(avisId, note, content) {
+  try {
+    // Parse avisId to integer
+    const parsedAvisId = parseInt(avisId);
+
+    if (isNaN(parsedAvisId)) {
+      throw new Error("ID de l'avis invalide.");
+    }
+
+    const updatedAvis = await prisma.review.update({
+      where: {
+        id: parsedAvisId, // Use the parsed integer ID
+      },
+      data: {
+        note,
+        content,
+        date_review: new Date(), // Optionnel : pour mettre à jour la date
+      },
+    });
+
+    return updatedAvis;
+  } catch (error) {
+    console.error("Erreur lors de la mise à jour de l'avis :", error);
+    throw new Error(
+      "Erreur lors de la mise à jour de l'avis : " + error.message
+    );
+  }
+}
+
+export async function getAvisbyId(avisId) {
+  try {
+    // Convert avisId to an integer
+    const parsedAvisId = parseInt(avisId);
+
+    if (isNaN(parsedAvisId)) {
+      throw new Error("ID de l'avis invalide.");
+    }
+
+    const avis = await prisma.review.findUnique({
+      where: {
+        id: parsedAvisId, // Use the parsed integer ID
+      },
+      include: {
+        user: true, // Si tu veux inclure les informations de l'utilisateur
+      },
+    });
+
+    if (!avis) {
+      throw new Error("Avis non trouvé.");
+    }
+
+    return avis;
+  } catch (error) {
+    console.error("Erreur lors de la récupération de l'avis :", error);
+    throw new Error(
+      "Erreur lors de la récupération de l'avis : " + error.message
+    );
+  }
 }

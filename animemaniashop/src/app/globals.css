@@ -68,6 +68,8 @@ body {
   border: none;
   border-radius: 8px;
   cursor: pointer;
+  background-color: var(--background);
+  color: white;
   transition: var(--transition-default);
   box-shadow: var(--box-shadow-sm);
   font-weight: 500;
@@ -1242,11 +1244,45 @@ h1 {
   color: var(--text-color);
   font-size: 1rem;
   line-height: 1.6;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .review-content p {
   margin: 0;
   font-style: italic;
+}
+
+.review-actions {
+  display: flex;
+  gap: 1rem;
+}
+
+.review-delete-button {
+  background-color: var(--danger-color);
+  color: white;
+  background-color: #c92d2d;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: var(--transition-default);
+  box-shadow: var(--box-shadow-sm);
+  font-weight: 500;
+}
+
+.review-edit-button {
+  background-color: var(--primary-color);
+  color: white;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 8px;
+  background-color: var(--primary-color);
+  cursor: pointer;
+  transition: var(--transition-default);
+  box-shadow: var(--box-shadow-sm);
+  font-weight: 500;
 }
 
 .no-reviews {
@@ -1272,4 +1308,120 @@ h1 {
   .reviews-title {
     font-size: 1.5rem;
   }
+}
+
+.edit-review-container {
+  display: flex;
+  flex-direction: column;
+  max-width: 600px;
+  margin: 15rem auto;
+  padding: 2.5rem;
+  background: linear-gradient(
+    135deg,
+    var(--primary-color),
+    var(--primary-color-dark)
+  );
+  color: var(--white-color);
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow-md);
+  animation: fadeIn 0.8s ease-out;
+}
+
+.edit-review-title {
+  text-align: center;
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 1.5rem;
+  color: var(--white-color);
+  text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.4);
+}
+
+.edit-review-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.edit-review-form .form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.edit-review-form label {
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: var(--white-color);
+}
+
+.edit-review-form select,
+.edit-review-form textarea {
+  padding: 12px;
+  font-size: 1rem;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.2);
+  color: var(--white-color);
+  outline: none;
+  transition: var(--transition-default);
+}
+
+.edit-review-form select:focus,
+.edit-review-form textarea:focus {
+  border-color: var(--white-color);
+  background: rgba(255, 255, 255, 0.3);
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1);
+}
+
+.edit-review-form textarea {
+  resize: vertical;
+}
+
+.edit-review-submit {
+  background-color: var(--primary-color);
+  color: var(--white-color);
+  padding: 12px 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: var(--transition-default);
+  box-shadow: var(--box-shadow-primary);
+  font-weight: 500;
+  margin-top: 1rem;
+}
+
+.edit-review-submit:hover {
+  background-color: var(--primary-color-dark);
+  box-shadow: 0 0 15px rgba(0, 188, 212, 0.8);
+  transform: translateY(-2px);
+}
+
+.edit-review-message {
+  text-align: center;
+  margin-bottom: 1rem;
+  font-weight: 500;
+}
+
+.edit-review-message.success {
+  color: #10b981;
+}
+
+.edit-review-message.error {
+  color: var(--danger-color);
+}
+
+.edit-review-loading {
+  text-align: center;
+  font-size: 1.5rem;
+  margin-top: 30px;
+  font-weight: bold;
+  color: var(--white-color);
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.note {
+  color: #000000;
 }

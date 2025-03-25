@@ -37,11 +37,6 @@ const Navbar = () => {
       <div className={`nav-links ${mobileMenuOpen ? "show-mobile-menu" : ""}`}>
         <ul>
           <li>
-            <Link href="#search" className="nav-link">
-              <span className="nav-link-text">Rechercher</span>
-            </Link>
-          </li>
-          <li>
             <Link href="/shop" className="nav-link">
               <span className="nav-link-text">Shop</span>
             </Link>
