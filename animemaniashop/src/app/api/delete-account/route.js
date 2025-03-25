@@ -15,7 +15,7 @@ export async function DELETE() {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     await prisma.user.delete({ where: { id: decoded.id } });
 
-    cookieStore.set("token", "", { expires: new Date(0) }); // Supprime le cookie
+    cookieStore.set("token", "", { expires: new Date(0) });
     return Response.json({ message: "Compte supprimé" });
   } catch (error) {
     return Response.json({ message: "Erreur serveur" }, { status: 500 });

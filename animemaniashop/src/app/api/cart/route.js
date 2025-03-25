@@ -6,52 +6,40 @@ async function getOrCreateCartId() {
   const cookieStore = cookies();
   let cartId = await cookieStore.get("cartId")?.value;
 
-  // Si le panier n'existe pas dans les cookies
   if (!cartId) {
-    // Créons un panier temporaire dans la base de données
-    // Nous n'avons plus besoin de spécifier date_creation car createdAt est automatique
     const tempCart = await prisma.cart.create({
-      data: {}, // Aucun champ à spécifier car createdAt et updatedAt sont automatiques
+      data: {},
     });
 
-    // Log pour vérifier si le panier est bien créé
     console.log("Panier créé avec succès :", tempCart);
 
     cartId = tempCart.id.toString();
 
-    // Nous allons retourner le nouveau cartId et l'indiquer pour définir le cookie dans la réponse
     return { cartId: parseInt(cartId), isNew: true };
   }
 
-  // Vérification si le panier existe bien dans la base de données
   const existingCart = await prisma.cart.findUnique({
     where: { id: parseInt(cartId) },
   });
 
-  // Log pour voir si le panier existe bien dans la base
   console.log("Vérification du panier dans la base de données :", existingCart);
 
   if (!existingCart) {
-    // Si le panier n'existe pas dans la BD mais existe dans le cookie,
-    // créons un nouveau panier
     const newCart = await prisma.cart.create({
-      data: {}, // Aucun champ à spécifier car createdAt et updatedAt sont automatiques
+      data: {},
     });
 
     console.log("Nouveau panier créé pour remplacer celui manquant :", newCart);
     return { cartId: newCart.id, isNew: true };
   }
 
-  // Retourner l'ID du panier existant
   return { cartId: parseInt(cartId), isNew: false };
 }
 
-// GET /api/cart - Récupère le contenu du panier
 export async function GET() {
   try {
     const { cartId, isNew } = await getOrCreateCartId();
 
-    // Récupérons les articles du panier avec les informations de produit
     const cartItems = await prisma.cart_Item.findMany({
       where: {
         cartId,
@@ -63,7 +51,6 @@ export async function GET() {
 
     const response = NextResponse.json({ cartItems });
 
-    // Si c'est un nouveau panier, définissons le cookie
     if (isNew) {
       response.cookies.set("cartId", cartId.toString(), {
         maxAge: 30 * 24 * 60 * 60,
@@ -78,14 +65,11 @@ export async function GET() {
   }
 }
 
-// POST /api/cart - Ajoute un produit au panier
-// POST /api/cart - Ajoute un produit au panier
 export async function POST(request) {
   try {
     const { productId, quantity } = await request.json();
     const { cartId, isNew } = await getOrCreateCartId();
 
-    // Vérifier si le produit existe
     const product = await prisma.product.findUnique({
       where: { id: productId },
     });
@@ -97,7 +81,6 @@ export async function POST(request) {
       );
     }
 
-    // Vérifier combien d'exemplaires sont déjà dans le panier
     const existingCartItem = await prisma.cart_Item.findFirst({
       where: { productId, cartId },
     });
@@ -143,7 +126,6 @@ export async function POST(request) {
   }
 }
 
-// PUT /api/cart - Met à jour la quantité d'un article dans le panier
 export async function PUT(request) {
   try {
     const { cartItemId, quantity } = await request.json();
@@ -161,15 +143,12 @@ export async function PUT(request) {
       );
     }
 
-    // Calculons la différence entre la nouvelle quantité et l'ancienne
     const quantityDifference = quantity - cartItem.quantitee;
 
-    // Vérifions si nous avons suffisamment de stock
     if (quantityDifference > 0 && cartItem.product.stock < quantityDifference) {
       return NextResponse.json({ error: "Stock insuffisant" }, { status: 400 });
     }
 
-    // Mettons à jour la quantité dans le panier
     const updatedCartItem = await prisma.cart_Item.update({
       where: { id: cartItemId },
       data: {
@@ -177,7 +156,6 @@ export async function PUT(request) {
       },
     });
 
-    // Mettons à jour le stock du produit
     await prisma.product.update({
       where: { id: cartItem.productId },
       data: {
@@ -192,12 +170,10 @@ export async function PUT(request) {
   }
 }
 
-// DELETE /api/cart - Supprime un article du panier
 export async function DELETE(request) {
   try {
     const { cartItemId } = await request.json();
 
-    // Vérifier si l'article existe
     const cartItem = await prisma.cart_Item.findUnique({
       where: { id: cartItemId },
     });
@@ -209,7 +185,6 @@ export async function DELETE(request) {
       );
     }
 
-    // Supprimer l'article du panier sans modifier le stock du produit
     await prisma.cart_Item.delete({
       where: { id: cartItemId },
     });

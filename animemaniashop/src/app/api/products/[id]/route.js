@@ -5,7 +5,6 @@ const prisma = new PrismaClient();
 
 export async function GET(request, context) {
   try {
-    // Await context.params properly
     const params = await context.params;
     const id = parseInt(params.id, 10);
 

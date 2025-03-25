@@ -1,10 +1,8 @@
-// /app/api/debug/route.js
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 
 export async function GET() {
   try {
-    // Vérification des connexions à la base de données
     const userCount = await prisma.user.count();
     const productCount = await prisma.product.count();
     const cartCount = await prisma.cart.count();

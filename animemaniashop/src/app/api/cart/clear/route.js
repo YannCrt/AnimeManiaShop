@@ -16,35 +16,30 @@ export async function DELETE() {
 
     const parsedCartId = parseInt(cartId);
 
-    // 🔹 Étape 1: Récupérer les articles du panier
     const cartItems = await prisma.cart_Item.findMany({
       where: { cartId: parsedCartId },
-      include: { product: true }, // Pour récupérer les infos des produits
+      include: { product: true },
     });
 
-    // 🔹 Étape 2: Mettre à jour le stock des produits
     for (const item of cartItems) {
       await prisma.product.update({
         where: { id: item.productId },
         data: {
           stock: {
-            decrement: item.quantitee, // Réduire le stock du nombre commandé
+            decrement: item.quantitee,
           },
         },
       });
     }
 
-    // 🔹 Étape 3: Supprimer tous les articles du panier
     await prisma.cart_Item.deleteMany({
       where: { cartId: parsedCartId },
     });
 
-    // 🔹 Étape 4: Supprimer le panier
     await prisma.cart.delete({
       where: { id: parsedCartId },
     });
 
-    // 🔹 Étape 5: Supprimer le cookie `cartId`
     const response = NextResponse.json({
       success: true,
       message: "Panier vidé et stock mis à jour",

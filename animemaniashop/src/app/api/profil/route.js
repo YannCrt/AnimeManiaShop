@@ -50,13 +50,11 @@ export async function PUT(req) {
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-    // Débogage - Vérifier les données reçues
     const body = await req.json();
-    console.log("Données reçues pour la mise à jour:", body); // Débogage
+    console.log("Données reçues pour la mise à jour:", body);
 
     const { firstname, lastname, email, adress } = body;
 
-    // Validation des données
     if (!firstname || !lastname || !email || !adress) {
       return Response.json(
         { message: "Tous les champs sont obligatoires" },
@@ -64,7 +62,6 @@ export async function PUT(req) {
       );
     }
 
-    // Mise à jour de l'utilisateur
     const updatedUser = await prisma.user.update({
       where: { id: decoded.id },
       data: {
@@ -75,7 +72,7 @@ export async function PUT(req) {
       },
     });
 
-    console.log("Utilisateur mis à jour:", updatedUser); // Débogage
+    console.log("Utilisateur mis à jour:", updatedUser);
 
     return Response.json({ user: updatedUser });
   } catch (error) {

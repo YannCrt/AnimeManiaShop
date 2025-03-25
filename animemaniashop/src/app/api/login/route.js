@@ -9,7 +9,6 @@ export async function POST(req) {
   try {
     const { email, password } = await req.json();
 
-    // Vérifier si l'utilisateur existe
     const user = await prisma.user.findUnique({
       where: { email },
     });
@@ -21,7 +20,6 @@ export async function POST(req) {
       );
     }
 
-    // Vérifier le mot de passe
     const passwordMatch = await bcrypt.compare(password, user.password);
     if (!passwordMatch) {
       return new Response(
@@ -30,19 +28,17 @@ export async function POST(req) {
       );
     }
 
-    // Générer un token JWT
     const token = jwt.sign(
       { id: user.id, email: user.email, role: user.role },
       process.env.JWT_SECRET,
       { expiresIn: "7d" }
     );
 
-    // Attendre cookies() avant d'utiliser set()
     const cookieStore = await cookies();
     cookieStore.set("token", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      maxAge: 7 * 24 * 60 * 60, // 7 jours
+      maxAge: 7 * 24 * 60 * 60,
       path: "/",
     });
 

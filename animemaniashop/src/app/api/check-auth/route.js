@@ -6,7 +6,7 @@ export async function GET() {
     const cookieStore = cookies();
     const token = cookieStore.get("token")?.value;
 
-    console.log("Token found:", !!token); // Debug log: confirms if token exists
+    console.log("Token found:", !!token);
 
     if (!token) {
       console.log("No token present");

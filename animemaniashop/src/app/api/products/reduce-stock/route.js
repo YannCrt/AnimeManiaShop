@@ -4,8 +4,6 @@ import prisma from "../../../../../lib/prisma";
 export async function POST(request) {
   try {
     const { productId, quantity } = await request.json();
-
-    // Verify the product exists and has enough stock
     const product = await prisma.product.findUnique({
       where: { id: productId },
     });
@@ -21,7 +19,6 @@ export async function POST(request) {
       return NextResponse.json({ error: "Stock insuffisant" }, { status: 400 });
     }
 
-    // Reduce the stock
     await prisma.product.update({
       where: { id: productId },
       data: {
