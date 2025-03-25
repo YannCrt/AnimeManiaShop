@@ -37,8 +37,9 @@ export async function POST(req) {
       { expiresIn: "7d" }
     );
 
-    // Stocker le token dans un cookie sécurisé
-    cookies().set("token", token, {
+    // Attendre cookies() avant d'utiliser set()
+    const cookieStore = await cookies();
+    cookieStore.set("token", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       maxAge: 7 * 24 * 60 * 60, // 7 jours

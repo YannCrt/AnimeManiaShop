@@ -185,6 +185,33 @@ async function main() {
       },
     },
   });
+
+  await prisma.anime.update({
+    where: { id: anime2.id },
+    data: {
+      categories: {
+        connect: { id: category2.id }, // Associer anime2 à la catégorie Action
+      },
+    },
+  });
+
+  await prisma.anime.update({
+    where: { id: anime3.id },
+    data: {
+      categories: {
+        connect: { id: category3.id }, // Associer anime3 à la catégorie Combat
+      },
+    },
+  });
+
+  await prisma.anime.update({
+    where: { id: anime4.id },
+    data: {
+      categories: {
+        connect: { id: category1.id }, // Associer anime4 à la catégorie Aventure
+      },
+    },
+  });
 }
 
 main()

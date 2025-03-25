@@ -1,4 +1,4 @@
-const { PrismaClient } = require('@prisma/client');
+const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 
 async function clearDatabase() {
@@ -12,7 +12,7 @@ async function clearDatabase() {
     await prisma.category.deleteMany({});
     await prisma.anime.deleteMany({});
     await prisma.user.deleteMany({});
-    
+
     console.log("Base de données nettoyée !");
   } catch (error) {
     console.error("Erreur lors du nettoyage de la base de données : ", error);
