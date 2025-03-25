@@ -9,29 +9,34 @@ export const useAuth = () => {
 };
 
 export const AuthProvider = ({ children }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false); // Initialisez à false par défaut // null means loading state
+  const [loading, setLoading] = useState(true);  // Used for handling loading state while fetching auth info
 
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const res = await fetch("/api/check-auth", { cache: "no-store" });
+        const res = await fetch("/api/check-auth");
         const data = await res.json();
+        console.log(data); // Pour vérifier la réponse
         setIsAuthenticated(data.authenticated);
       } catch (error) {
-        console.error("Erreur lors de la vérification de l'authentification :", error);
+        console.error("Error during auth check:", error);
+        setIsAuthenticated(false);
+      } finally {
+        setLoading(false);
       }
     };
-
+  
     checkAuth();
   }, []);
 
   const logout = async () => {
     await fetch("/api/logout", { method: "POST" });
-    setIsAuthenticated(false); 
+    setIsAuthenticated(false);
   };
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, logout }}>
+    <AuthContext.Provider value={{ isAuthenticated, loading, logout }}>
       {children}
     </AuthContext.Provider>
   );

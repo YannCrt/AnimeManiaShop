@@ -167,92 +167,6 @@ body {
   align-items: center;
 }
 
-/* Hamburger menu pour mobile */
-.hamburger-menu {
-  display: none;
-  flex-direction: column;
-  justify-content: space-between;
-  width: 30px;
-  height: 21px;
-  cursor: pointer;
-  z-index: 1001;
-}
-
-.hamburger-menu span {
-  display: block;
-  width: 100%;
-  height: 3px;
-  background-color: var(--white-color);
-  transition: all 0.3s ease;
-}
-
-/* Media queries pour la responsivité */
-@media (max-width: 768px) {
-  .hamburger-menu {
-    display: flex;
-    margin-right: 1.5rem;
-  }
-
-  .nav-links {
-    position: fixed;
-    top: 0;
-    right: -100%;
-    width: 75%;
-    height: 100vh;
-    background: linear-gradient(
-      135deg,
-      var(--primary-color),
-      var(--primary-color-dark)
-    );
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    transition: right 0.3s ease;
-    box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
-  }
-
-  .nav-links.show-mobile-menu {
-    right: 0;
-  }
-
-  .nav-links ul {
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-  }
-
-  .nav-links ul li {
-    margin: 1rem 0;
-    width: 100%;
-    text-align: center;
-  }
-
-  .nav-links ul li:last-child {
-    margin-right: 0;
-  }
-
-  .nav-link {
-    display: block;
-    padding: 1rem 0;
-    width: 100%;
-    font-size: 1.2rem;
-  }
-
-  /* Animation pour hamburger menu */
-  .show-mobile-menu .hamburger-menu span:first-child {
-    transform: rotate(45deg) translate(5px, 5px);
-  }
-
-  .show-mobile-menu .hamburger-menu span:nth-child(2) {
-    opacity: 0;
-  }
-
-  .show-mobile-menu .hamburger-menu span:last-child {
-    transform: rotate(-45deg) translate(7px, -6px);
-  }
-}
-
 /* Footer */
 .footer {
   background-color: var(--white-color);
@@ -732,7 +646,7 @@ body {
 /* Style de l'image */
 .product-image img {
   width: 100%;
-  height: auto;
+  height: 100%;
   border-radius: 12px;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
   object-fit: cover;
@@ -1002,7 +916,7 @@ h1 {
   margin: 10px 0;
   border-bottom: 1px solid #ddd;
   padding-bottom: 20px;
-  min-width: 45rem;
+  min-width: 48%;
 }
 
 .cart-item img {
@@ -1129,6 +1043,8 @@ h1 {
   border-radius: 8px;
   max-height: 200px;
   width: 13rem;
+  height: 100%;
+  min-height: 13rem;
   margin-bottom: 1rem;
 }
 
@@ -1486,7 +1402,7 @@ h1 {
   font-size: 1rem;
   font-weight: bold;
   color: white;
-  background-color: var(--background);
+  background-color: var(--primary-color);
   border: none;
   border-radius: 5px;
   cursor: pointer;
@@ -1702,7 +1618,7 @@ h1 {
   color: #000000;
 }
 
-/* Commande */
+/* Styles généraux */
 .command-page {
   max-width: 800px;
   margin: 10rem auto;
@@ -1712,6 +1628,7 @@ h1 {
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
+/* Titres */
 .command-page h1 {
   font-size: 1.8rem;
   font-weight: bold;
@@ -1720,6 +1637,7 @@ h1 {
   margin-bottom: 1.5rem;
 }
 
+/* Champs de formulaire */
 .command-page input {
   width: 100%;
   padding: 10px;
@@ -1734,16 +1652,19 @@ h1 {
   outline: none;
 }
 
+/* Labels */
 .command-page label {
   font-weight: 600;
   color: #444;
 }
 
+/* Gestion des erreurs */
 .command-page .text-red-500 {
   font-size: 0.875rem;
   color: #e63946;
 }
 
+/* Bouton de validation */
 .command-page button {
   width: 100%;
   padding: 12px;
@@ -1760,6 +1681,7 @@ h1 {
   background-color: var(--primary-color-dark);
 }
 
+/* Responsive */
 @media (max-width: 768px) {
   .command-page {
     padding: 1rem;
@@ -1769,8 +1691,6 @@ h1 {
     font-size: 1.5rem;
   }
 }
-
-/* Confirmation-Command */
 
 .order-confirmation {
   display: flex;

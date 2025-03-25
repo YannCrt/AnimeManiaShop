@@ -1,17 +1,24 @@
-"use client";
+"use client"
 
-import React, { useState } from "react";
-import Image from "next/image";
+import { useAuth } from "../contexte/auth"; // Assurez-vous que l'import est correct
+import { useState } from "react";
 import Link from "next/link";
-import { useAuth } from "../contexte/auth";
+import Image from "next/image";
 
 const Navbar = () => {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, loading } = useAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const toggleMobileMenu = () => {
     setMobileMenuOpen(!mobileMenuOpen);
   };
+
+  console.log("isAuthenticated:", isAuthenticated);  // Debugging
+  console.log("loading:", loading);  // Debugging
+
+  if (loading) {
+    return <div>Loading...</div>;  // Ou ton indicateur personnalisé
+  }
 
   return (
     <div className="navbar">
@@ -36,24 +43,35 @@ const Navbar = () => {
       <div className={`nav-links ${mobileMenuOpen ? "show-mobile-menu" : ""}`}>
         <ul>
           <li>
+            <Link href="#search" className="nav-link">
+              <span className="nav-link-text">Rechercher</span>
+            </Link>
+          </li>
+          <li>
             <Link href="/shop" className="nav-link">
               <span className="nav-link-text">Shop</span>
             </Link>
           </li>
 
-          {isAuthenticated ? (
-            <li>
-              <Link href="/profil" className="nav-link">
-                <span className="nav-link-text">Mon profil</span>
-              </Link>
-            </li>
-          ) : (
-            <li>
-              <Link href="/login" className="nav-link">
-                <span className="nav-link-text">Se connecter</span>
-              </Link>
-            </li>
+          {/* Affichage conditionnel basé sur isAuthenticated */}
+          {!loading && (
+            <>
+              {isAuthenticated ? (
+                <li>
+                  <Link href="/profil" className="nav-link">
+                    <span className="nav-link-text">Mon profil</span>
+                  </Link>
+                </li>
+              ) : (
+                <li>
+                  <Link href="/login" className="nav-link">
+                    <span className="nav-link-text">Se connecter</span>
+                  </Link>
+                </li>
+              )}
+            </>
           )}
+
           <li>
             <Link href="/cart" className="nav-link cart-link">
               <span className="nav-link-text">Mon Panier</span>
