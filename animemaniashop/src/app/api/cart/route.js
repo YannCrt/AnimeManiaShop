@@ -79,13 +79,13 @@ export async function GET() {
 }
 
 // POST /api/cart - Ajoute un produit au panier
+// POST /api/cart - Ajoute un produit au panier
 export async function POST(request) {
   try {
     const { productId, quantity } = await request.json();
-
     const { cartId, isNew } = await getOrCreateCartId();
 
-    // Vérifions d'abord le stock disponible
+    // Vérifier si le produit existe
     const product = await prisma.product.findUnique({
       where: { id: productId },
     });
@@ -97,28 +97,27 @@ export async function POST(request) {
       );
     }
 
-    if (product.stock < quantity) {
+    // Vérifier combien d'exemplaires sont déjà dans le panier
+    const existingCartItem = await prisma.cart_Item.findFirst({
+      where: { productId, cartId },
+    });
+
+    const totalQuantityInCart = existingCartItem
+      ? existingCartItem.quantitee
+      : 0;
+    const newTotalQuantity = totalQuantityInCart + quantity;
+
+    if (newTotalQuantity > product.stock) {
       return NextResponse.json({ error: "Stock insuffisant" }, { status: 400 });
     }
 
-    // Vérifions si le produit est déjà dans le panier
-    let cartItem = await prisma.cart_Item.findFirst({
-      where: {
-        productId,
-        cartId,
-      },
-    });
-
-    if (cartItem) {
-      // Si le produit est déjà dans le panier, mettons à jour la quantité
+    let cartItem;
+    if (existingCartItem) {
       cartItem = await prisma.cart_Item.update({
-        where: { id: cartItem.id },
-        data: {
-          quantitee: cartItem.quantitee + quantity,
-        },
+        where: { id: existingCartItem.id },
+        data: { quantitee: newTotalQuantity },
       });
     } else {
-      // Sinon, ajoutons un nouvel article au panier
       cartItem = await prisma.cart_Item.create({
         data: {
           cartId,
@@ -128,18 +127,8 @@ export async function POST(request) {
       });
     }
 
-    // Mettons à jour le stock du produit
-    await prisma.product.update({
-      where: { id: productId },
-      data: {
-        stock: product.stock - quantity,
-      },
-    });
-
-    // Créer la réponse
     const response = NextResponse.json({ success: true, cartItem });
 
-    // Si c'est un nouveau panier, définissons le cookie
     if (isNew) {
       response.cookies.set("cartId", cartId.toString(), {
         maxAge: 30 * 24 * 60 * 60,
@@ -208,9 +197,9 @@ export async function DELETE(request) {
   try {
     const { cartItemId } = await request.json();
 
+    // Vérifier si l'article existe
     const cartItem = await prisma.cart_Item.findUnique({
       where: { id: cartItemId },
-      include: { product: true },
     });
 
     if (!cartItem) {
@@ -220,22 +209,14 @@ export async function DELETE(request) {
       );
     }
 
-    // Restaurons le stock du produit
-    await prisma.product.update({
-      where: { id: cartItem.productId },
-      data: {
-        stock: cartItem.product.stock + cartItem.quantitee,
-      },
-    });
-
-    // Supprimons l'article du panier
+    // Supprimer l'article du panier sans modifier le stock du produit
     await prisma.cart_Item.delete({
       where: { id: cartItemId },
     });
 
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.error("Erreur lors de la suppression de l'article:", error);
+    console.error("Erreur lors de la suppression du panier:", error);
     return NextResponse.json({ error: "Erreur serveur" }, { status: 500 });
   }
 }

@@ -46,6 +46,22 @@ export default function ProductPage() {
   const addToCart = async () => {
     try {
       setAddingToCart(true);
+
+      // Vérifier combien d'exemplaires sont déjà dans le panier
+      const cartResponse = await fetch("/api/cart");
+      const cartData = await cartResponse.json();
+      const existingItem = cartData.cartItems.find(
+        (item) => item.productId === parseInt(productId)
+      );
+      const totalInCart = existingItem ? existingItem.quantitee : 0;
+
+      // Vérifier si la quantité totale dépasse le stock disponible
+      if (totalInCart + quantity > product.stock) {
+        throw new Error(
+          "Vous ne pouvez pas ajouter plus que le stock disponible."
+        );
+      }
+
       const response = await fetch("/api/cart", {
         method: "POST",
         headers: {
@@ -68,16 +84,9 @@ export default function ProductPage() {
         throw new Error(data.error);
       }
 
-      // Logique de succès
       setNotification({
         type: "success",
         message: `${quantity} ${product.name} ajouté(s) au panier !`,
-      });
-
-      // Mise à jour du stock
-      setProduct({
-        ...product,
-        stock: product.stock - quantity,
       });
 
       setQuantity(1);

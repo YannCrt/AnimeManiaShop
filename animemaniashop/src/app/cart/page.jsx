@@ -40,8 +40,8 @@ function CartPage() {
     }
   };
 
-  const updateQuantity = async (cartItemId, newQuantity) => {
-    if (newQuantity < 1) return;
+  const updateQuantity = async (cartItemId, newQuantity, maxStock) => {
+    if (newQuantity < 1 || newQuantity > maxStock) return;
 
     try {
       const response = await fetch("/api/cart", {
@@ -62,13 +62,11 @@ function CartPage() {
         );
       }
 
-      // Rafraîchissons le panier
       fetchCartItems();
     } catch (err) {
       setError(err.message);
     }
   };
-
   const removeItem = async (cartItemId) => {
     try {
       const response = await fetch("/api/cart", {
@@ -165,8 +163,13 @@ function CartPage() {
                     <button
                       className="increase-btn bg-gray-200 px-2 py-1 rounded-r"
                       onClick={() =>
-                        updateQuantity(item.id, item.quantitee + 1)
+                        updateQuantity(
+                          item.id,
+                          item.quantitee + 1,
+                          item.product.stock
+                        )
                       }
+                      disabled={item.quantitee >= item.product.stock} // Désactive le bouton si le stock est atteint
                     >
                       +
                     </button>
