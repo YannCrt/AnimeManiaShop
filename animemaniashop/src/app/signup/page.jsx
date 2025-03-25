@@ -44,7 +44,7 @@ function Inscription() {
 
         if (loginResponse.ok) {
           alert("Inscription et connexion réussies !");
-          window.location.href = "/profil"; // Rediriger vers la page d'accueil
+          window.location.href = "/profil"; 
         } else {
           alert(loginData.message || "Erreur lors de la connexion.");
         }

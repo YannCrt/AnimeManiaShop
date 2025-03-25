@@ -33,7 +33,6 @@ function LoginPage() {
         throw new Error(data.message || "Erreur de connexion");
       }
 
-      // Recharger la page pour rafraîchir les cookies
       window.location.href = "/profil";
     } catch (error) {
       setError(error.message || "Une erreur est survenue");

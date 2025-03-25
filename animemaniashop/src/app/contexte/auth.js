@@ -2,15 +2,12 @@
 
 import React, { createContext, useState, useContext, useEffect } from "react";
 
-// Crée le contexte
 const AuthContext = createContext();
 
-// Hook personnalisé pour utiliser le contexte
 export const useAuth = () => {
   return useContext(AuthContext);
 };
 
-// Provider pour envelopper ton application et fournir l'état d'authentification
 export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
@@ -30,7 +27,7 @@ export const AuthProvider = ({ children }) => {
 
   const logout = async () => {
     await fetch("/api/logout", { method: "POST" });
-    setIsAuthenticated(false); // On met à jour immédiatement l'état après la déconnexion
+    setIsAuthenticated(false); 
   };
 
   return (

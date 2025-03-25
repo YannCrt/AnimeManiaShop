@@ -7,10 +7,9 @@ const SupprimerPage = () => {
   const [showConfirmation, setShowConfirmation] = useState(true);
   const router = useRouter();
 
-  // Fonction pour annuler la suppression et revenir à la page précédente
   const annulerSuppression = () => {
-    setShowConfirmation(false); // Ferme la boîte de confirmation
-    router.push("/profil"); // Redirige vers la page de profil
+    setShowConfirmation(false); 
+    router.push("/profil"); 
   };
 
   const handleDeleteAccount = async () => {

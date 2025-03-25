@@ -59,11 +59,9 @@ function CommandPage() {
     if (!validateForm()) return;
 
     try {
-      // Fetch cart items to send with the order
       const cartResponse = await fetch("/api/cart");
       const cartData = await cartResponse.json();
 
-      // Submit order
       const orderResponse = await fetch("/api/orders", {
         method: "POST",
         headers: {
@@ -83,10 +81,8 @@ function CommandPage() {
         throw new Error("Erreur lors de la validation de la commande");
       }
 
-      // Clear cart after successful order
       await fetch("/api/cart/clear", { method: "DELETE" });
 
-      // Redirect to confirmation page
       router.push("/order-confirmation");
     } catch (error) {
       console.error("Erreur:", error);
@@ -236,7 +232,7 @@ function CommandPage() {
         <div className="mt-6">
           <button
             type="submit"
-            className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
+            className="w-full bg-cyan-600 text-white py-2 rounded hover:bg-blue-700"
           >
             Valider la commande
           </button>

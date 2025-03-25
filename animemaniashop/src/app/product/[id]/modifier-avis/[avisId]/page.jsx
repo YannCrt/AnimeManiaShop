@@ -1,4 +1,4 @@
-"use client"; // Assurez-vous d'importer cette fonction client-side
+"use client"; 
 
 import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";

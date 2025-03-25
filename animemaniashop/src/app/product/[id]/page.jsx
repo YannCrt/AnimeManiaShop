@@ -34,15 +34,12 @@ export default function ProductDetailPage() {
         const productId = parseInt(params.id);
         setProductId(productId);
 
-        // Fetch product details
         const fetchedProduct = await getProductById(productId);
         setProduct(fetchedProduct);
 
-        // Fetch product reviews
         const fetchedAvis = await getAvisbyProductID(productId);
         setAvis(fetchedAvis);
 
-        // Fetch current user
         const user = await getCurrentUser();
         setCurrentUser(user);
 

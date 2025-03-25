@@ -62,7 +62,7 @@ const EditProfilePage = () => {
       });
 
       const data = await response.json();
-      console.log("Réponse du serveur:", data); // Débogage
+      console.log("Réponse du serveur:", data); 
 
       if (!response.ok)
         throw new Error(data.message || "Erreur lors de la mise à jour");
@@ -81,7 +81,6 @@ const EditProfilePage = () => {
     <div className="edit-profile-container">
       <h2>Modifier Mon Profil</h2>
 
-      {/* Affichage du message d'erreur ou de succès */}
       {errorMessage && <div className="error-message">{errorMessage}</div>}
       {successMessage && (
         <div className="success-message">{successMessage}</div>

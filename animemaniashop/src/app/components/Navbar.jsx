@@ -27,7 +27,6 @@ const Navbar = () => {
         </Link>
       </div>
 
-      {/* Hamburger menu pour mobile */}
       <div className="hamburger-menu" onClick={toggleMobileMenu}>
         <span></span>
         <span></span>
