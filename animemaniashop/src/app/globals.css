@@ -1732,7 +1732,7 @@ h1 {
   font-size: 1rem;
   font-weight: bold;
   color: white;
-  background-color: var(--background);
+  background-color: var(--primary-color);
   border: none;
   border-radius: 5px;
   cursor: pointer;
