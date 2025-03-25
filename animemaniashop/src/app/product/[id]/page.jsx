@@ -2,44 +2,117 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
-// Pas de modification nécessaire ici après l'ajout de deleteAvis dans product.action.js
+import { useParams } from "next/navigation";
 import {
   getProductById,
   getAvisbyProductID,
   addAvis,
   getCurrentUser,
-  deleteAvis, // L'importation fonctionne maintenant
+  deleteAvis,
 } from "../../../../lib/product.action";
 
-// Le reste du code de ProductDetailPage reste inchangé.
-
-export default function ProductDetailPage({ params }) {
-  const [message, setMessage] = useState(null);
+export default function ProductDetailPage() {
+  const params = useParams();
   const [productId, setProductId] = useState(null);
   const [product, setProduct] = useState(null);
+  const [quantity, setQuantity] = useState(1);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [addingToCart, setAddingToCart] = useState(false);
+  const [notification, setNotification] = useState(null);
+
+  // Reviews states
   const [avis, setAvis] = useState([]);
   const [currentUser, setCurrentUser] = useState(null);
+  const [message, setMessage] = useState(null);
 
   useEffect(() => {
     async function fetchData() {
-      const resolvedParams = await params;
-      const productId = parseInt(resolvedParams.id);
-      setProductId(productId);
+      try {
+        if (!params.id) return;
 
-      const fetchedProduct = await getProductById(productId);
-      const fetchedAvis = await getAvisbyProductID(productId);
-      const user = await getCurrentUser();
-      setProduct(fetchedProduct);
-      setAvis(fetchedAvis);
-      setCurrentUser(user);
+        const productId = parseInt(params.id);
+        setProductId(productId);
+
+        // Fetch product details
+        const fetchedProduct = await getProductById(productId);
+        setProduct(fetchedProduct);
+
+        // Fetch product reviews
+        const fetchedAvis = await getAvisbyProductID(productId);
+        setAvis(fetchedAvis);
+
+        // Fetch current user
+        const user = await getCurrentUser();
+        setCurrentUser(user);
+
+        setLoading(false);
+      } catch (err) {
+        setError(err.message);
+        setLoading(false);
+      }
     }
 
     fetchData();
-  }, [params]);
+  }, [params.id]);
 
-  if (!product) {
-    return <div>Produit non trouvé</div>;
-  }
+  const handleQuantityChange = (e) => {
+    const value = parseInt(e.target.value);
+    const maxQuantity = product?.stock || 1;
+    setQuantity(Math.min(Math.max(1, value), maxQuantity));
+  };
+
+  const addToCart = async () => {
+    try {
+      setAddingToCart(true);
+      const response = await fetch("/api/cart", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          productId: parseInt(productId),
+          quantity,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Erreur lors de l'ajout au panier");
+      }
+
+      const data = await response.json();
+      console.log("Ajout au panier réussi:", data);
+
+      if (data.error) {
+        throw new Error(data.error);
+      }
+
+      // Logique de succès
+      setNotification({
+        type: "success",
+        message: `${quantity} ${product.name} ajouté(s) au panier !`,
+      });
+
+      // Mise à jour du stock
+      setProduct({
+        ...product,
+        stock: product.stock - quantity,
+      });
+
+      setQuantity(1);
+    } catch (err) {
+      console.error("Erreur lors de l'ajout au panier:", err);
+      setNotification({
+        type: "error",
+        message: err.message,
+      });
+    } finally {
+      setAddingToCart(false);
+      setTimeout(() => {
+        setNotification(null);
+      }, 3000);
+    }
+  };
 
   async function handleAddAvis(event) {
     event.preventDefault();
@@ -66,12 +139,39 @@ export default function ProductDetailPage({ params }) {
     }
   }
 
+  const handleDeleteAvis = async (avisId) => {
+    try {
+      await deleteAvis(avisId);
+      setAvis(avis.filter((avi) => avi.id !== avisId));
+      setMessage("Avis supprimé avec succès !");
+    } catch (error) {
+      console.error("Erreur lors de la suppression de l'avis:", error);
+      setMessage("Erreur lors de la suppression de l'avis.");
+    }
+  };
+
   const renderStars = (note) => {
     return "★".repeat(note) + "☆".repeat(5 - note);
   };
 
+  if (loading) return <div className="loading">Chargement...</div>;
+  if (error) return <div className="error">Erreur: {error}</div>;
+  if (!product) return <div>Produit non trouvé</div>;
+
   return (
     <div className="container mx-auto p-4">
+      {notification && (
+        <div
+          className={`notification ${notification.type} p-4 mb-4 rounded ${
+            notification.type === "success"
+              ? "bg-green-100 text-green-800"
+              : "bg-red-100 text-red-800"
+          }`}
+        >
+          {notification.message}
+        </div>
+      )}
+
       <div className="product-detail">
         <h1 className="product-title text-2xl font-bold mb-4">
           {product.name}
@@ -112,8 +212,9 @@ export default function ProductDetailPage({ params }) {
                 type="number"
                 id="quantity"
                 min="1"
-                defaultValue="1"
                 max={product.stock}
+                value={quantity}
+                onChange={handleQuantityChange}
                 className="quantity-input p-2 border rounded w-20"
               />
             </div>
@@ -124,8 +225,10 @@ export default function ProductDetailPage({ params }) {
                   ? "bg-blue-600 text-white hover:bg-blue-700"
                   : "bg-gray-400 cursor-not-allowed"
               }`}
+              onClick={addToCart}
+              disabled={product.stock === 0 || addingToCart}
             >
-              Ajouter au panier
+              {addingToCart ? "Ajout en cours..." : "Ajouter au panier"}
             </button>
           </div>
         </div>
@@ -208,13 +311,13 @@ export default function ProductDetailPage({ params }) {
                     <div className="review-actions">
                       <a
                         className="review-edit-button "
-                        href={`/produit/${productId}/modifier-avis/${avi.id}`}
+                        href={`${productId}/modifier-avis/${avi.id}`}
                       >
                         Modifier
                       </a>
                       <button
                         className="review-delete-button"
-                        onClick={() => deleteAvis(avi.id)}
+                        onClick={() => handleDeleteAvis(avi.id)}
                       >
                         Supprimer
                       </button>

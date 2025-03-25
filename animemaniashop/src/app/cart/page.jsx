@@ -111,7 +111,7 @@ function CartPage() {
           <p className="mb-4">Votre panier est vide.</p>
           <Link
             href="/shop"
-            className="inline-block bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700"
+            className="inline-block bg-cyan-500 text-white py-2 px-4 rounded hover:bg-cyan-600"
           >
             Continuer vos achats
           </Link>

@@ -1,6 +1,6 @@
 "use server";
 
-import { prisma } from "./prisma";
+import prisma from "./prisma";
 import { cookies } from "next/headers";
 import jwt from "jsonwebtoken";
 
