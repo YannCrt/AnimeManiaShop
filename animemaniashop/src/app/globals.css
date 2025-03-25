@@ -1702,7 +1702,7 @@ h1 {
   color: #000000;
 }
 
-/* Styles généraux */
+/* Commande */
 .command-page {
   max-width: 800px;
   margin: 10rem auto;
@@ -1712,7 +1712,6 @@ h1 {
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
-/* Titres */
 .command-page h1 {
   font-size: 1.8rem;
   font-weight: bold;
@@ -1721,7 +1720,6 @@ h1 {
   margin-bottom: 1.5rem;
 }
 
-/* Champs de formulaire */
 .command-page input {
   width: 100%;
   padding: 10px;
@@ -1736,19 +1734,16 @@ h1 {
   outline: none;
 }
 
-/* Labels */
 .command-page label {
   font-weight: 600;
   color: #444;
 }
 
-/* Gestion des erreurs */
 .command-page .text-red-500 {
   font-size: 0.875rem;
   color: #e63946;
 }
 
-/* Bouton de validation */
 .command-page button {
   width: 100%;
   padding: 12px;
@@ -1765,7 +1760,6 @@ h1 {
   background-color: var(--primary-color-dark);
 }
 
-/* Responsive */
 @media (max-width: 768px) {
   .command-page {
     padding: 1rem;
@@ -1775,6 +1769,8 @@ h1 {
     font-size: 1.5rem;
   }
 }
+
+/* Confirmation-Command */
 
 .order-confirmation {
   display: flex;
